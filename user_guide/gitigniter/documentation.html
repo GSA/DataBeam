@@ -1,0 +1,240 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>GitIgniter = A Github Library for CodeIgniter</title>
+
+<style type='text/css' media='all'>@import url('./userguide.css');</style>
+<link rel='stylesheet' type='text/css' media='all' href='../userguide.css' />
+
+<meta http-equiv='expires' content='-1' />
+<meta http-equiv= 'pragma' content='no-cache' />
+<meta name='robots' content='all' />
+
+</head>
+<body>
+
+<!-- START NAVIGATION -->
+<div id="nav"><div id="nav_inner"></div></div>
+<div id="nav2"><a name="top">&nbsp;</a></div>
+<div id="masthead">
+<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+<tr>
+<td><h1>Github Class</h1></td>
+<!-- <td id="breadcrumb_right"><a href="#">Right Breadcrumb</a></td> -->
+</tr>
+</table>
+</div>
+<!-- END NAVIGATION -->
+
+
+<!-- START BREADCRUMB -->
+<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+<tr>
+<td id="breadcrumb">
+<a href="http://codeigniter.com/user_guide/">CI User Guide</a> &nbsp;
+&nbsp;&#8250;&nbsp;
+GitIgniter Class
+</td>
+<td id="searchbox"><form method="get" action="http://www.google.com/search"><input type="hidden" name="as_sitesearch" id="as_sitesearch" value="epiclabs.com/gitigniter" />Search Project User Guide&nbsp; <input type="text" class="input" style="width:200px;" name="q" id="q" size="31" maxlength="255" value="" />&nbsp;<input type="submit" class="submit" name="sa" value="Go" /></form></td>
+</tr>
+</table>
+<!-- END BREADCRUMB -->
+
+<br clear="all" />
+
+
+<!-- START CONTENT -->
+<div id="content">
+
+
+<h1>GitIgniter Class</h1>
+
+<p>Simple Wrapper for the Github REST API</p>
+
+<p class="important"><strong>Important:</strong>&nbsp; This is a very early release, please use with care and check back often.</p>
+
+<p>Features:</p>
+
+<ul>
+	<li>OAuth Authentication</li>
+	<li>GET calls</li>
+	<li>POST calls</li>
+	<li>Configuration</li>
+	<li>Examples</li>
+</ul>
+
+<h2>Example Usage</h2>
+
+
+<!-- Authentication -->
+
+<h3>OAUth Authentication</h3>
+
+<p>To authenticate a user against Github's OAuth create a controller to do the following.</p>
+
+<code>
+	$this->load->library('gitigniter');<br />
+	<br />
+		$this->gitigniter->authorize_request();
+</code>
+
+<p>The user will be redirected to github.com for authorization, then redirected back to your site.</p>
+
+<code>
+
+	$token = $this->gitigniter->process_code(); //With a bit of magic $token will have the actual OAuth token (pro tip: store it for later use.)
+</code>
+
+<!-- Get calls -->
+
+<h3>Making GET calls</h3>
+
+<p>Some calls are made using HTTP GET for those follow this pattern</p>
+
+<code>
+	$this->gitigniter->get_call( 'user/followers' ); //Returns followers of the authenticated user
+	<br /><br />
+	$this->gitigniter->get_call( 'user/nicdev' ); //Returns information for user nicdev
+</code>
+
+<p>You can follow this pattern for any GET type call in the API.</p>
+
+<!-- Post calls -->
+
+<h3>Making POST calls</h3>
+
+<p>For API calls requiring a POST, follow this pattern</p>
+
+<code>
+	//The minimum necessary parameters to create a repo is giving it a name<br />
+	
+	$repo_options = array( 'name' => 'test' . time() ); <br /><br />
+
+	//Pass the required parameters in an array in the form of 'parameter_name' => 'parameter value' <br />
+
+	$this->gitigniter->post_call( 'user/repos', $repo_options ); <br />
+
+</code>
+
+
+<h2>Configuration Options</h2>
+
+<p>All configuration options are stored in a configuration file named gitigniter.php</p>
+
+
+<table cellpadding="0" cellspacing="1" border="0" style="width:100%" class="tableborder">
+<tr>
+	<th>Preference</th>
+	<th>Default&nbsp;Value</th>
+	<th>Options</th>
+	<th>Description</th>
+</tr>
+<tr>
+	<td class="td"><strong>gh_client_id</strong></td>
+	<td class="td"></td>
+	<td class="td"></td>
+	<td class="td">The client ID provided by Github when registering your application.</td>
+</tr>
+<tr>
+	<td class="td"><strong>gh_secret</strong></td>
+	<td class="td"></td>
+	<td class="td"></td>
+	<td class="td">The secret provided by Github when registering your application.</td>
+</tr>
+<tr>
+	<td class="td"><strong>gh_auth_url</strong></td>
+	<td class="td">https://github.com/login/oauth/authorize</td>
+	<td class="td"></td>
+	<td class="td">The address used by Github for authorization requests.</td>
+</tr>
+<tr>
+	<td class="td"><strong>gh_token_url</strong></td>
+	<td class="td">https://github.com/login/oauth/access_token</td>
+	<td class="td"></td>
+	<td class="td">The address used by Github for exchanging temporary codes for OAuth tokens.</td>
+</tr>
+<tr>
+	<td class="td"><strong>gh_redir_url</strong></td>
+	<td class="td">test/index</td>
+	<td class="td"></td>
+	<td class="td">Controller/action responsible for accepting the temporary code (you should place the process_code() call in this controller.</td>
+</tr>
+<tr>
+	<td class="td"><strong>gh_scope</strong></td>
+	<td class="td">user,public_repo,repo,gist</td>
+	<td class="td">user,public_repo,repo,gist</td>
+	<td class="td">The needed <a href="http://developer.github.com/v3/oauth/#scopes">API scope</a>. You should always request the least possible (default is full)</td>
+</tr>
+<tr>
+	<td class="td"><strong>gh_table</strong></td>
+	<td class="td">meta</td>
+	<td class="td"></td>
+	<td class="td">Only necessary if you intend to use this library's method for storing or retrieving the token. Default is 'meta' to match up with Ion Auth</td>
+</tr>
+<tr>
+	<td class="td"><strong>gh_where_field</strong></td>
+	<td class="td">user_id</td>
+	<td class="td"></td>
+	<td class="td">Only necessary if you intend to use this library's method for storing or retrieving the token. Default is 'user_id' to match up with Ion Auth</td>
+</tr>
+<tr>
+	<td class="td"><strong>gh_token_field</strong></td>
+	<td class="td">gh_token</td>
+	<td class="td"></td>
+	<td class="td">The column name in the table where the token is stored. Only necessary if you intend to use this library's method for storing or retrieving the token.</td>
+</tr>
+
+</table>
+
+<h2>GitIgniter Function Reference</h2>
+
+<h3>$this->gitigniter->authorize_request()</h3>
+<p>Redirect user to Github's authorization page.</p>
+<code>$this->gitigniter->authorize_request()</code>
+
+<h3>$this->gitigniter->process_code()</h3>
+<p>Accept Github's temporary code and request an OAuth token.</p>
+<code>$this->gitigniter->authorize_request()</code>
+
+<h3>$this->gitigniter->store_token(<var>$token</var>, <var>$user_id</var>, <var>$session</var>, <var>$database</var>)</h3>
+<p>Store the user's token to database and/or session based on configuration file options.</p>
+
+<code>//This will store to session (as 'gh_token') and to database as well<br />
+$this->gitigniter->store_token( <var>$token</var>, <var>$user_id</var>, TRUE, TRUE );
+</code>
+
+<h3>$this->gitigniter->retrieve_token(<var>$user_id</var>)</h3>
+<p>Retrieve the user's token from database. In the process it also stores it to the session as 'gh_token.'</p>
+
+<code>
+$this->gitigniter->retrieve_token( <var>$user_id</var> );
+</code>
+
+
+<h3>$this->gitigniter->post_call(<var>$api_call</var>,<var>$api_options</var>)</h3>
+<p>Make a call to the Github API using the POST method (see sample usage above.)'</p>
+
+<h3>$this->gitigniter->post_get(<var>$api_call</var>,<var>[$api_options]</var>)</h3>
+<p>Make a call to the Github API using the GET method (see sample usage above.)'</p>
+
+
+</div>
+<!-- END CONTENT -->
+
+
+<div id="footer">
+<p>
+Previous Topic:&nbsp;&nbsp;<a href="#">Previous Class</a>
+&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+<a href="#top">Top of Page</a>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+<a href="#">User Guide Home</a>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+Next Topic:&nbsp;&nbsp;<a href="#">Next Class</a>
+</p>
+<p><a href="http://codeigniter.com">CodeIgniter</a> &nbsp;&middot;&nbsp; Copyright &#169; 2006 - 2011 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a></p>
+</div>
+
+</body>
+</html>
