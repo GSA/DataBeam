@@ -5,3 +5,7 @@ application/config/dbapi.php
 application/config/database.php
 
 .htaccess
+
+application/config/config.php
+
+application/config/database.php
