@@ -151,7 +151,7 @@ $config['rest_keys_table'] = 'api_keys';
 |
 |	FALSE
 
-	CREATE TABLE `keys` (
+	CREATE TABLE `api_keys` (
 	  `id` int(11) NOT NULL AUTO_INCREMENT,
 	  `key` varchar(40) NOT NULL,
 	  `level` int(2) NOT NULL,
@@ -211,7 +211,7 @@ $config['rest_logs_table'] = 'api_logs';
 |
 |	FALSE
 |
-	CREATE TABLE `logs` (
+	CREATE TABLE `api_logs` (
 	  `id` int(11) NOT NULL AUTO_INCREMENT,
 	  `uri` varchar(255) NOT NULL,
 	  `method` varchar(6) NOT NULL,
@@ -249,7 +249,7 @@ $config['rest_limits_table'] = 'api_limits';
 |
 |	FALSE
 |
-	CREATE TABLE `limits` (
+	CREATE TABLE `api_limits` (
 	  `id` int(11) NOT NULL AUTO_INCREMENT,
 	  `uri` varchar(255) NOT NULL,
 	  `count` int(10) NOT NULL,
