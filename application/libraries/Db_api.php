@@ -325,8 +325,9 @@ abstract class Db_api extends REST_Controller
 		} catch( PDOException $e ) {
 			echo $e->getMessage();
 		}
-		
-		$this->cache_set( $key, $columns, $db->ttl );
+
+		$cache_ttl = ( isset( $this->db->ttl) ) ? $this->db->ttl : $this->ttl;
+		$this->cache_set( $key, $columns, $cache_ttl );
 		return $columns;
 	}
 
