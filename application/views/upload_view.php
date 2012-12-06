@@ -16,7 +16,7 @@
 <!-- Force latest IE rendering engine or ChromeFrame if installed -->
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
 <meta charset="utf-8">
-<title>jQuery File Upload Demo</title>
+<title>CSV to API</title>
 <meta name="description" content="File Upload widget with multiple file selection, drag&amp;drop support, progress bar and preview images for jQuery. Supports cross-domain, chunked and resumable file uploads. Works with any server-side platform (Google App Engine, PHP, Python, Ruby on Rails, Java, etc.) that supports standard HTML form file uploads.">
 <meta name="viewport" content="width=device-width">
 <!-- Bootstrap CSS Toolkit styles -->
@@ -45,15 +45,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="https://github.com/blueimp/jQuery-File-Upload">jQuery File Upload</a>
+            <a class="brand" href="https://github.com/philipashlock/RESTdb">CSV to API</a>
             <div class="nav-collapse">
                 <ul class="nav">
-                    <li class="active"><a href="http://blueimp.github.com/jQuery-File-Upload/">Demo</a></li>
-                    <li><a href="https://github.com/blueimp/jQuery-File-Upload/downloads">Downloads</a></li>
-                    <li><a href="https://github.com/blueimp/jQuery-File-Upload">Source Code</a></li>
-                    <li><a href="https://github.com/blueimp/jQuery-File-Upload/wiki">Documentation</a></li>
-                    <li><a href="https://github.com/blueimp/jQuery-File-Upload#support">Support</a></li>
-                    <li><a href="https://blueimp.net">&copy; Sebastian Tschan</a></li>
+                    <li><a href="https://github.com/philipashlock/RESTdb">Source Code</a></li>
+                    <li><a href="https://github.com/blueimp/jQuery-File-Upload/">jQuery File Upload</a></li>
+                    <li><a href="https://github.com/project-open-data/db-to-api">DB to API</a></li>
+                    <li><a href="https://github.com/philsturgeon/codeigniter-restserver">CI REST Server</a></li>
                 </ul>
             </div>
         </div>
@@ -61,13 +59,8 @@
 </div>
 <div class="container">
     <div class="page-header">
-        <h1>jQuery File Upload Demo</h1>
+        <h1>CSV to API</h1>
     </div>
-    <blockquote>
-        <p>File Upload widget with multiple file selection, drag&amp;drop support, progress bars and preview images for jQuery.<br>
-        Supports cross-domain, chunked and resumable file uploads and client-side image resizing.<br>
-        Works with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads.</p>
-    </blockquote>
     <br>
     <!-- The file upload form used as target for the file upload widget -->
     <form id="fileupload" action="<?php echo base_url() . 'upload/upload_file'; ?>" method="POST" enctype="multipart/form-data">
@@ -112,18 +105,23 @@
         <!-- The table listing the files available for upload/download -->
         <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
     </form>
-    <br>
-    <div class="well">
-        <h3>Demo Notes</h3>
-        <ul>
-            <li>The maximum file size for uploads in this demo is <strong>5 MB</strong> (default file size is unlimited).</li>
-            <li>Only image files (<strong>JPG, GIF, PNG</strong>) are allowed in this demo (by default there is no file type restriction).</li>
-            <li>Uploaded files will be deleted automatically after <strong>5 minutes</strong> (demo setting).</li>
-            <li>You can <strong>drag &amp; drop</strong> files from your desktop on this webpage with Google Chrome, Mozilla Firefox and Apple Safari.</li>
-            <li>Please refer to the <a href="https://github.com/blueimp/jQuery-File-Upload">project website</a> and <a href="https://github.com/blueimp/jQuery-File-Upload/wiki">documentation</a> for more information.</li>
-            <li>Built with Twitter's <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> toolkit and Icons from <a href="http://glyphicons.com/">Glyphicons</a>.</li>
-        </ul>
+
+    <div class="well" id="fakedroptarget">
+	
+        <h3>Drop CSV Files Here (or anywhere on page)</h3>
+
     </div>
+
+	<h4>Details</h4>
+    <ul>
+        <li>File Upload widget with multiple file selection, drag&amp;drop support, progress bars and preview images for jQuery.</li>
+        <li>Supports cross-domain, chunked and resumable file uploads and client-side image resizing.</li>
+        <li>Front-end can be used with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads. </li>		
+		<li>Current backend utilizes SQLite for each csv uploaded, DB-to-API for arbitrary queries using GET, and CI REST Server for API logging, 
+			key management, format transformations and other common API features.
+		</li>
+    </ul>
+
 </div>
 <!-- modal-gallery is the modal dialog used for the image gallery -->
 <div id="modal-gallery" class="modal modal-gallery hide fade" data-filter=":odd" tabindex="-1">

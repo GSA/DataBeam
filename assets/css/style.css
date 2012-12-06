@@ -13,3 +13,8 @@
 body{
   padding-top: 60px;
 }
+
+#fakedroptarget {
+	margin : 0;
+	margin-bottom : 4em;
+}
