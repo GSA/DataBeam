@@ -27,7 +27,7 @@ class Restdb extends Db_api {
 		//$this->register_db_api( 'democracymap', $args );		// moved this to the main library constructor
 		
 		// if we don't have a request send them to the upload page
-		if(empty($_REQUEST)) redirect('/upload');
+		if(empty($_REQUEST['db'])) redirect('/upload');
 		
 		if ($_REQUEST['upload'] == 'true') {
 			$db_path = $_SERVER['DOCUMENT_ROOT'] . '/uploads/db/' . $_REQUEST['db'] . '.db';
