@@ -26,15 +26,28 @@ class Restdb extends Db_api {
 		
 		//$this->register_db_api( 'democracymap', $args );		// moved this to the main library constructor
 		
+		if ($_REQUEST['upload'] == 'true') {
+			$db_path = '/Users/philipashlock/Sites/github/restdb/uploads/db/' . $_REQUEST['db'] . '.db';
+			$config = array($_REQUEST['db'] => array( 
+			            							'name' => $db_path,
+			            							'username' => '',
+			            							'password' => '',
+			            							'server' => '',
+			            							'port' => '',
+			            							'type' => 'sqlite',
+			            							'table_blacklist' => array(),
+			            							'column_blacklist' => array()));		
+		
+		} else {
+			$config = config_item('args');
+		} 
+		
+		$this->register_db( $_REQUEST['db'], $config );		
+		//$this->register_custom_sql( 'democracymap', config_item('sql_args') );		
 		
 		$query = $this->parse_query();
 		$this->set_db( $query['db'] );
 		$results = $this->query( $query );
-        //
-		//$renderer = 'render_' . $query['format'];
-		//$this->$renderer( $results, $query );		
-		
-		//$this->load->view('welcome_message');
 		
 		$this->response($results, 200);
 	}

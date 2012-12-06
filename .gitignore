@@ -9,3 +9,5 @@ application/config/config.php
 application/config/database.php
 
 application/config/rest.php
+
+uploads/*

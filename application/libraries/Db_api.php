@@ -21,10 +21,6 @@ abstract class Db_api extends REST_Controller
 
 		// Lets grab the config and get ready to party
 		$this->load->config('dbapi');
-		
-		
-		$this->register_db( 'democracymap', config_item('args') );
-		//$this->register_custom_sql( 'democracymap', config_item('sql_args') );
 
 	}
 
@@ -34,9 +30,10 @@ abstract class Db_api extends REST_Controller
 	 * @param string $name the dataset name
 	 * @param array $args the dataset properties
 	 */
-	protected function register_db( $name = null, $args = array() ) {
+	protected function register_db( $id = null, $args = array() ) {
 
 		$defaults = array(
+			'id' => $id, 
 			'name' => null,
 			'username' => 'root',
 			'password' => 'root',
@@ -48,10 +45,10 @@ abstract class Db_api extends REST_Controller
 			'ttl' => $this->ttl,
 		);
 
-		$args = $this->shortcode_atts( $defaults, $args );
-		$name = $this->slugify( $name );
+		$args = $this->shortcode_atts( $defaults, $args[$id] );
+		$id = $this->slugify( $id );
 
-		$this->dbs[$name] = (object) $args;
+		$this->dbs[$id] = (object) $args;
 
 	}
 	
@@ -216,6 +213,12 @@ abstract class Db_api extends REST_Controller
 	 * @todo support port #s and test on each database
 	 */
 	protected function &connect( $db ) {
+
+
+
+		if ( is_object( $db ) ) {
+			$db = $db->id;
+		}
 		
 		// check for existing connection
 		if ( isset( $this->connections[$db] ) ) {
@@ -282,7 +285,17 @@ abstract class Db_api extends REST_Controller
 		
 			$dbh = &$this->connect( $db );
 			try { 
-				$stmt = $dbh->query( 'SHOW TABLES' );
+					
+				
+				$db_id = $this->get_db( $db )->id;
+				
+				if ($this->get_db( $db )->type == 'sqlite') {
+					$stmt = $dbh->query("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name");					
+				} else {
+					$stmt = $dbh->query( 'SHOW TABLES' );
+				}
+				
+				
 			} catch( PDOException $e ) {
 				echo $e->getMessage();
 			}
@@ -291,7 +304,9 @@ abstract class Db_api extends REST_Controller
 			while ( $table = $stmt->fetch() ) {
 				$tables[] = $table[0];
 			}
-		
+			
+			//var_dump($tables);
+				
 		}
 		
 		return in_array( $query_table, $tables );
@@ -319,9 +334,19 @@ abstract class Db_api extends REST_Controller
 		$dbh = &$this->connect( $db );
 		
 		try {
-			$q = $dbh->prepare( "DESCRIBE $table" );
-			$q->execute();
-			$columns = $q->fetchAll(PDO::FETCH_COLUMN);
+			
+			if ($this->get_db( $db )->type == 'sqlite') {
+				$q = $dbh->prepare( "PRAGMA table_info([$table])" );								
+				$q->execute();
+				$columns = $q->fetchAll(PDO::FETCH_COLUMN, 1);				
+
+			} else {
+				$q = $dbh->prepare( "DESCRIBE $table" );				
+				$q->execute();
+				$columns = $q->fetchAll(PDO::FETCH_COLUMN);				
+			}
+
+			
 		} catch( PDOException $e ) {
 			echo $e->getMessage();
 		}
@@ -378,63 +403,70 @@ abstract class Db_api extends REST_Controller
 			if ( !$this->verify_table( $query['table'] ) && empty($query['query'])) {
 				$this->error( 'Invalid Table' );
 			}
+			
 
 			// santize column name
 			if ( $query['column'] ) {
 				if ( !$this->verify_column( $query['column'], $query['table'] ) ) {
 					$query['column'] = null;
 				}
-		  }
+		  	}
 
-		if(!empty($query['query']) && !empty($this->custom_sql[$query['query']])) {
+			if (!empty($query['query']) && !empty($this->custom_sql[$query['query']])) {
 
-			$query_name = $query['query'];
-			parse_str( $_SERVER['QUERY_STRING'], $custom_vars );
+				$query_name = $query['query'];
+				parse_str( $_SERVER['QUERY_STRING'], $custom_vars );
 			
-			foreach ($this->custom_sql[$query_name]->parameters as $parameter) {
-				$search = '{[' . $parameter . ']}';
-				$replace = $custom_vars[$parameter];
-				$this->custom_sql[$query_name]->sql = str_replace($search, $replace, $this->custom_sql[$query_name]->sql);
-			}
-
-			$sql = $this->custom_sql[$query_name]->sql;
-
-			$sth = $dbh->prepare( $sql );
-			$sth->execute();
-
-		}		
-		else {
-
-		  $sql = 'SELECT * FROM ' . $query['table'];
-
-			if ( $query['value'] && $query['column'] == null ) {
-				$query['column'] = $this->get_first_column( $query['table'] );
-			}
-
-			if ( $query['value'] && $query['column'] ) {
-				$sql .= " WHERE `{$query['table']}`.`{$query['column']}` = :value";
-			}
-
-			if ( $query['order_by'] && $query['direction'] ) {
-
-				if ( !$this->verify_column( $query['order_by'], $query['table'] ) ) {
-					return false;
+				foreach ($this->custom_sql[$query_name]->parameters as $parameter) {
+					$search = '{[' . $parameter . ']}';
+					$replace = $custom_vars[$parameter];
+					$this->custom_sql[$query_name]->sql = str_replace($search, $replace, $this->custom_sql[$query_name]->sql);
 				}
 
-				$sql .= " ORDER BY `{$query['table']}`.`{$query['order_by']}` {$query['direction']}";
+				$sql = $this->custom_sql[$query_name]->sql;
 
-			}
+				$sth = $dbh->prepare( $sql );
+				$sth->execute();
 
-			if ( $query['limit'] ) {
-				$sql .= " LIMIT " . (int) $query['limit'];
-			}
+			}		
+			else {
 
-			$sth = $dbh->prepare( $sql );
-			$sth->bindParam( ':value', $query['value'] );
-			$sth->execute();
-		}	
+			  $sql = 'SELECT * FROM ' . $query['table'];
+
+				if ( $query['value'] && $query['column'] == null ) {
+					$query['column'] = $this->get_first_column( $query['table'] );
+				}
+
+				if ( $query['value'] && $query['column'] ) {
+					$sql .= " WHERE `{$query['table']}`.`{$query['column']}` = :value";
+				}
+
+				if ( $query['order_by'] && $query['direction'] ) {
+
+					if ( !$this->verify_column( $query['order_by'], $query['table'] ) ) {
+						return false;
+					}
+
+					$sql .= " ORDER BY `{$query['table']}`.`{$query['order_by']}` {$query['direction']}";
+
+				}
+
+				if ( $query['limit'] ) {
+					$sql .= " LIMIT " . (int) $query['limit'];
+				}
+				
+				
+				$sth = $dbh->prepare( $sql );
+				
+				if ($query['value']) {
+					$sth->bindParam( ':value', $query['value'] );
+				}
+				
+				$sth->execute();
+			}	
 
 			$results = $sth->fetchAll( PDO::FETCH_OBJ );
+
 			$results = $this->sanitize_results( $results );
 
 		} catch( PDOException $e ) {
