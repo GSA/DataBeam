@@ -122,6 +122,9 @@
 		</li>
     </ul>
 
+	<h4>Further Reading</h4>
+	<p> For more advanced functionality you might be interested in <a href="http://reclinejs.com">Recline.js</a></p>
+
 </div>
 <!-- modal-gallery is the modal dialog used for the image gallery -->
 <div id="modal-gallery" class="modal modal-gallery hide fade" data-filter=":odd" tabindex="-1">
