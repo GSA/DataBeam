@@ -10,4 +10,6 @@ application/config/database.php
 
 application/config/rest.php
 
+uploads/*.csv
 
+uploads/db/*.db
