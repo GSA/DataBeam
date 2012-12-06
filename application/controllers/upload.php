@@ -17,7 +17,7 @@ class Upload extends CI_Controller {
         $this->load->helper(array('form', 'url'));
 
 //Set relative Path with CI Constant
-        $this->setPath_img_upload_folder("uploads/");
+        $this->setPath_img_upload_folder("uploads");
         $this->setPath_img_thumb_upload_folder("assets/img/articles/thumbnails/");
 
         

@@ -27,7 +27,8 @@ class Restdb extends Db_api {
 		//$this->register_db_api( 'democracymap', $args );		// moved this to the main library constructor
 		
 		if ($_REQUEST['upload'] == 'true') {
-			$db_path = '/Users/philipashlock/Sites/github/restdb/uploads/db/' . $_REQUEST['db'] . '.db';
+			$db_path = $_SERVER['DOCUMENT_ROOT'] . '/uploads/db/' . $_REQUEST['db'] . '.db';
+			
 			$config = array($_REQUEST['db'] => array( 
 			            							'name' => $db_path,
 			            							'username' => '',
