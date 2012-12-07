@@ -41,8 +41,9 @@
 $route['default_controller'] = "restdb";
 $route['404_override'] = '';
 
+$route['(:any)/local/(:any)'] = "restdb/router_local/$1/$2"; // 1: user_url, 3: name_url
 $route['(:any)/(:any)/(:any)'] = "restdb/router/$1/$2/$3"; // 1: user_url, 2: name_url, 3: table name
-$route['(:any)/local/(:any)/(:any)'] = "restdb/router_local/$1/$2/$3"; // 1: user_url, 2: name_url, 3: table name
+
 
 
 /* End of file routes.php */

@@ -87,11 +87,13 @@ class Upload extends CI_Controller {
             //Get info 
             $info = new stdClass();
             
+			$username = 'philipashlock'; // hardcoding this for now. 
+
             $info->name = $name;
             $info->size = $data['file_size'];
             $info->type = $data['file_type'];
             $info->url = $this->getPath_img_upload_folder() . $config['file_name'];
-            $info->api = '/?db=' . $unique_filename . '&table=' . $name . '&upload=true';
+            $info->api = '/' . $username . '/local/' . $name;
             $info->thumbnail_url = $this->getPath_img_upload_folder() . $config['file_name']; //I set this to original file since I did not create thumbs.  change to thumbnail directory if you do = $upload_path_url .'/thumbs' .$name
             $info->delete_url = $this->getDelete_img_url() . $config['file_name'];
             $info->delete_type = 'DELETE';
@@ -154,6 +156,32 @@ class Upload extends CI_Controller {
 			}			
 			
 			//echo "Database $name created successfully";			
+			//$this->save_db_connection()
+			
+			//First should do a query to make sure that the dbname and user_url are unique
+			
+				$data = array(
+							'db_name'           => 	$name,
+							'name_full'         => 	NULL,
+							'name_url'          => 	$name,
+							'name_hash'         => 	$unique_filename,
+							'description'       => 	NULL,
+							'user_id'           => 	1,
+							'user_url'          => 	'philipashlock',
+							'db_username'       => 	NULL,
+							'db_password'       => 	NULL,
+							'db_server'         => 	NULL,
+							'db_port'           => 	NULL,
+							'local'             => 	1,
+							'type'              => 	'sqlite',
+							'table_blacklist'   => 	'',
+							'column_blacklist'  => 	'',
+						);
+			
+			$this->db->insert('db_connections', $data);	
+
+			//return $this->db->get_where('db_connections', array('user_url' => $user_url, 'name_url' => $name_url));				
+				
 				
 			// Save these details to MySQL! - $name, $column_headers, $unique_filename
 

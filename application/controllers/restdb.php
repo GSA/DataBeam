@@ -21,34 +21,48 @@ class Restdb extends Db_api {
 	 * map to /index.php/welcome/<method_name>
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
-	public function index_get($db = null, $user = null, $table = null)
+	public function index_get($user = null, $db = null, $table = null, $local = null)
 	{
 				
 		if (empty($db)) 	$db = $this->input->get('db', TRUE);
 		if (empty($table)) 	$table = $this->input->get('table', TRUE);		
 		if (empty($user)) 	$user = $this->input->get('user', TRUE);		
-		if (empty($upload)) $upload = $this->input->get('upload', TRUE);		
+		if (empty($local)) 	$local = $this->input->get('local', TRUE);		
 		
 		// if we don't have a request send them to the upload page
 		if(empty($db)) redirect('/upload');
 		
 		
-		if (!empty($upload) && $upload == 'true') {
-			$db_path = $_SERVER['DOCUMENT_ROOT'] . '/uploads/db/' . $db . '.db';
+		if (!empty($local) && $local == 'true') {
 			
-			$config = array($db => array( 
-			            							'name' => $db_path,
-			            							'username' => '',
-			            							'password' => '',
-			            							'server' => '',
-			            							'port' => '',
-			            							'type' => 'sqlite',
-			            							'table_blacklist' => array(),
-			            							'column_blacklist' => array()));		
+			$query = $this->get_database($user, $db);			
+									
+			if ($query->num_rows() > 0) {
+
+			   	$db_settings = $query->row(0);
+
+				$db_path = $_SERVER['DOCUMENT_ROOT'] . '/uploads/db/' . $db_settings->name_hash . '.db';				
+
+				$table_blacklist = (!empty($table_blacklist)) ? explode(',', $db_settings->table_blacklist) : array();
+				$column_blacklist = (!empty($column_blacklist)) ? explode(',', $db_settings->column_blacklist) : array();								
+
+				$config = array($db_settings->name_url => array(
+															'name' 				=> $db_path,
+															'username' 			=> $db_settings->db_username,
+															'password' 			=> $db_settings->db_password,
+															'server' 			=> $db_settings->db_server,
+															'port' 				=> $db_settings->db_port,
+															'type' 				=> $db_settings->type,
+															'table_blacklist' 	=> $table_blacklist,
+															'column_blacklist' 	=> $column_blacklist));				
+			}			
+			
+			
+				
 		
 		} else {
 			
-			$query = $this->get_database($user, $db);
+			$query = $this->get_database($user, $db);			
 						
 			if ($query->num_rows() > 0) {
 				
@@ -90,7 +104,17 @@ class Restdb extends Db_api {
 
 	public function router_get($user_url = null, $name_url = null, $table_name = null) {								
 				
-		$this->index_get($name_url, $user_url, $table_name);		
+		$this->index_get($user_url, $name_url, $table_name);		
+						
+	}
+	
+	public function router_local_get($user_url = null, $name_url = null) {								
+		
+		$table_name = $name_url;		
+		$local = 'true';		
+				
+		$this->index_get($user_url, $name_url, $table_name, $local);		
+				
 						
 	}
 	
