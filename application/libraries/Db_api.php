@@ -155,12 +155,6 @@ abstract class Db_api extends REST_Controller
 	 */
 	public function parse_query( $query = null ) {
 
-		if ( $query == null ) {
-			$query = $_SERVER['QUERY_STRING'];
-		}
-
-		parse_str( $query, $parts );
-
 		$defaults = array(
 			'db' => null,
 			'table' => null,
@@ -174,7 +168,37 @@ abstract class Db_api extends REST_Controller
 			'query' =>  null
 		);
 
+
+		if ( $query == null ) {
+			$query = $_SERVER['QUERY_STRING'];
+		}
+		
+		
+		if (is_string($query)) {
+			parse_str( $query, $parts );
+		}		
+		elseif (is_array($query)) {
+			
+			// if we have additional query segments in the query string, lets merge those together
+			if(!empty($_SERVER['QUERY_STRING'])) {
+				parse_str( $_SERVER['QUERY_STRING'], $additional_parts );
+				
+				// the URL path query segments take precedence over the query string (overwriting them just like overwriting defaults)
+				$defaults = $this->shortcode_atts( $defaults, $additional_parts );
+				$parts = $this->shortcode_atts( $defaults, $query ); 
+				
+			} else {
+				$parts = $query;
+			}
+						
+		} 	
+		else {
+			$parts = $query;
+		}
+		
+
 		$parts = $this->shortcode_atts( $defaults, $parts );
+		
 
 		if ( $parts['db'] == null ) {
 			$this->error( 'Must select a database' );

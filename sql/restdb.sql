@@ -97,34 +97,41 @@ LOCK TABLES `api_logs` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `databases`
+-- Table structure for table `db_connections`
 --
 
-DROP TABLE IF EXISTS `databases`;
+DROP TABLE IF EXISTS `db_connections`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `databases` (
-  `id` int(12) NOT NULL,
-  `name` int(11) NOT NULL,
-  `name_hash` int(11) NOT NULL,
+CREATE TABLE `db_connections` (
+  `id` int(12) NOT NULL AUTO_INCREMENT,
+  `db_name` varchar(255) NOT NULL,
+  `name_full` varchar(255) DEFAULT NULL,
+  `name_url` varchar(255) NOT NULL,
+  `name_hash` varchar(255) DEFAULT NULL,
+  `description` text,
   `user_id` int(11) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `server` varchar(255) NOT NULL,
-  `port` int(6) NOT NULL,
+  `user_url` varchar(255) NOT NULL,
+  `db_username` varchar(255) DEFAULT NULL,
+  `db_password` varchar(255) DEFAULT NULL,
+  `db_server` varchar(255) DEFAULT NULL,
+  `db_port` int(6) DEFAULT NULL,
+  `local` tinyint(1) NOT NULL DEFAULT '0',
   `type` varchar(255) NOT NULL,
-  `table_blacklist` text NOT NULL,
-  `column_blacklist` text NOT NULL
+  `table_blacklist` text,
+  `column_blacklist` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_url` (`name_url`,`user_url`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `databases`
+-- Dumping data for table `db_connections`
 --
 
-LOCK TABLES `databases` WRITE;
-/*!40000 ALTER TABLE `databases` DISABLE KEYS */;
-/*!40000 ALTER TABLE `databases` ENABLE KEYS */;
+LOCK TABLES `db_connections` WRITE;
+/*!40000 ALTER TABLE `db_connections` DISABLE KEYS */;
+/*!40000 ALTER TABLE `db_connections` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -136,4 +143,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-12-06 15:13:14
+-- Dump completed on 2012-12-07 17:00:50
