@@ -96,9 +96,38 @@ class Restdb extends Db_api {
 	}
 	
 	
-	private function get_database($user_url, $name_url) {
+	public function user_data_get($user) {
+		
+			
+			// First check to see if the user has ever logged in
+			
+			
+			
+			// Then check for database entries for that user
+			
+			
+			$query = $this->get_database($user);			
+									
+			if ($query->num_rows() > 0) {
+				$data = array();
+				$data['connections'] = $query->result_array();
+				$this->load->view('user_view', $data);
 				
-		return $this->db->get_where('db_connections', array('user_url' => $user_url, 'name_url' => $name_url));				
+			}		
+		
+		
+	}
+	
+	
+	private function get_database($user_url, $name_url = null) {
+		
+		$query = array('user_url' => $user_url);		
+
+		if (!empty($name_url)) {
+			$query['name_url'] = $name_url;		
+		}
+				
+		return $this->db->get_where('db_connections', $query);				
 		
 	}
 
