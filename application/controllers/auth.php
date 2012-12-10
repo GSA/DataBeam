@@ -50,7 +50,7 @@ class Auth extends CI_Controller
 				// check to see if we already have a user in our users_auth table as well as corresponding id in users table that matches the github userid of this person															
 				// Saving to users_auth if not already found, should save to session userdata too. 		
 				
-				if(!$this->check_user()) {
+				if(!$this->check_user($user['nickname'])) {
 					
 					$user = array_merge($users_auth, $user_data);
 					
