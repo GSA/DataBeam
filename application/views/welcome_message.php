@@ -74,7 +74,7 @@
 	<div id="body">
 		<p><a class="btn-auth btn-github large" href="/login">Sign in with <b>GitHub</b></a></p>        
 		
-		<p>RESTdb allows you to automatically turn any CSV or database into an API</p>
+		<h2>RESTdb allows you to automatically turn any CSV or database into an API</h2>
 
 		<h4 style="margin-top : 4em">Details</h4>
 	    <ul>
