@@ -63,19 +63,17 @@
 		-webkit-box-shadow: 0 0 8px #D0D0D0;
 	}
 	</style>
-	<link rel="stylesheet" href="/assets/css/auth-buttons.css">
-	
 </head>
 <body>
 
 <div id="container">
-	<h1>Welcome to RESTdb!</h1>
 
 	<div id="body">
-		<p><a class="btn-auth btn-github large" href="/login">Sign in with <b>GitHub</b></a></p>        
+		
+		The form for adding your db connection would go here
+		
 	</div>
 
-	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds</p>
 </div>
 
 </body>

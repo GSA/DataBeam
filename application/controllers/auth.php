@@ -42,13 +42,21 @@ class Auth extends CI_Controller
 								   'token' => $token->access_token, 
 								   'provider' => 'github');
 								
-				$user_data = array('username' => $user['nickname'], 
+				$user_data = array('username' => $user['nickname'],
 								   'name_full' => $user['name'], 
-								   'github_url' => $user['urls']['GitHub']);								
+								   'name_url' => $user['nickname'], 								
+								   'provider_url' => $user['urls']['GitHub']);								
 								
-				// check to see if we already have a user in our users_auth table as well as corresponding id in users table that matches the github userid of this person							
-								
+				// check to see if we already have a user in our users_auth table as well as corresponding id in users table that matches the github userid of this person															
 				// Saving to users_auth if not already found, should save to session userdata too. 		
+				
+				if(!$this->check_user()) {
+					
+					$user = array_merge($users_auth, $user_data);
+					
+					$this->db->insert('users_auth', $user);
+				}
+				
 				//$this->db->insert('users_auth', $users_auth) ;
 				
 				$this->session->set_userdata($users_auth);	
@@ -59,7 +67,7 @@ class Auth extends CI_Controller
 				// if we don't already have this user, then direct to registration page with prefilled values (username, email if provided) - will need to check to see if username or email address are already in use too
 				// if we already have this user then we make sure session variables are set and redirect them to their dashboard page. Every other page checks their session to make sure they're logged in and legit
 				
-				 redirect('upload');
+				 redirect('dashboard');
 
 
 				/*
@@ -89,6 +97,16 @@ class Auth extends CI_Controller
 
         }
     }
+
+	public function check_user($username) {
+			$query = $this->db->get_where('users_auth', array('name_url' => $username));
+
+			return sizeof($query->row_array());	
+
+	}
+	
+	
+	
 
 	public function logout() {
 		$this->session->sess_destroy();

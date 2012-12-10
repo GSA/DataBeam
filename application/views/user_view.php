@@ -67,23 +67,43 @@
 <body>
 
 <div id="container">
-	<h1>Your APIs</h1>
 
 	<div id="body">
+		
+		
+		<?php
+		
+		if ($this->session->userdata('username')) {	
+		?>
+		
+		
+		<a href="/upload">Upload a CSV</a> <br>
+		<a href="/add">Add a Database</a> <br> <br>
+		<a href="/logout">logout</a>		
+		
+		<?php		
+		}
+		?>
 
 		<?php
-		foreach($connections as $connection) {
+		if (!empty($connections)) {
 			
-			$db_name = $connection['name_full'];
-			$db_url = $connection['name_url'];
-			$user_url 	= $connection['user_url'];
+			echo '<h1>' . $user['name_full'] . ' APIs</h1>';
 			
-			$db_name = (empty($db_name)) ? $db_url : $db_name;
+			foreach($connections as $connection) {
 			
-			echo "<a href=\"/$user_url/$db_url\">$db_name</a> <br>";
+				$db_name = $connection['name_full'];
+				$db_url = $connection['name_url'];
+				$user_url 	= $connection['user_url'];
+				
+				$db_name = (empty($db_name)) ? $db_url : $db_name;				
+				$db_url = ($connection['local']) ? 'local/' . $db_url : $db_url;			
+			
+				echo "<a href=\"/$user_url/$db_url\">$db_name</a> <br>";
+			}
 		}
-		
 		?>
+
 
 	</div>
 

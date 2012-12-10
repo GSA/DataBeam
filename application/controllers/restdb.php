@@ -96,24 +96,41 @@ class Restdb extends Db_api {
 	}
 	
 	
-	public function user_data_get($user) {
+	
+	
+	
+	
+	public function dashboard_get($user = null) {
 		
 			
-			// First check to see if the user has ever logged in
+		if (empty($user) && !$this->session->userdata('username')) {	
+			redirect('login');
+		}			
 			
+		if(empty($user) && $this->session->userdata('username')) {
+			$user =	$this->session->userdata('username');	
+		}
+
+
+			// Prepare output data
+			$data = array();			
 			
+			// Get user data
+			$query = $this->get_user($user);			
+									
+			if ($query->num_rows() > 0) {
+				$data['user'] = $query->first_row('array');
+			}			
 			
-			// Then check for database entries for that user
-			
-			
+			// Then check for database entries for that user			
 			$query = $this->get_database($user);			
 									
 			if ($query->num_rows() > 0) {
-				$data = array();
 				$data['connections'] = $query->result_array();
-				$this->load->view('user_view', $data);
-				
 			}		
+			
+			
+			$this->load->view('user_view', $data);
 		
 		
 	}
@@ -130,6 +147,23 @@ class Restdb extends Db_api {
 		return $this->db->get_where('db_connections', $query);				
 		
 	}
+	
+	
+	private function get_user($user_url) {
+		
+		$query = array('name_url' => $user_url);		
+				
+		return $this->db->get_where('users_auth', $query);				
+		
+	}	
+	
+	public function add_get() {
+		
+		$this->load->view('add_view');
+		
+	}	
+	
+	
 
 	public function router_get($user_url = null, $name_url = null, $table_name = null) {								
 				
@@ -143,8 +177,7 @@ class Restdb extends Db_api {
 		$local = 'true';		
 				
 		$this->index_get($user_url, $name_url, $table_name, $local);		
-				
-						
+					
 	}
 	
 	

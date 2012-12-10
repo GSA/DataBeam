@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "restdb";
+$route['default_controller'] = "welcome";
 $route['404_override'] = '';
 
 $route['login'] = "auth/session/github";
@@ -51,8 +51,12 @@ $route['(:any)/(:any)/(:any)'] = "restdb/router/$1/$2/$3"; // 1: user_url, 2: na
 $route['upload'] = "upload";
 $route['upload/upload_file'] = "upload/upload_file";
 
+$route['add'] = "restdb/add";
 
-$route['(:any)'] = "restdb/user_data/$1";
+$route['dashboard'] = "restdb/dashboard";
+
+$route['(:any)'] = "restdb/dashboard/$1";
+
 
 
 

@@ -170,6 +170,10 @@ DROP TABLE IF EXISTS `users_auth`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users_auth` (
   `user_id` int(8) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `name_url` varchar(255) NOT NULL,
+  `name_full` varchar(255) NOT NULL,
+  `provider_url` text NOT NULL,
   `provider_user_id` int(12) NOT NULL,
   `token` text NOT NULL,
   `provider` varchar(255) NOT NULL DEFAULT 'github'
@@ -194,4 +198,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-12-10  1:58:45
+-- Dump completed on 2012-12-10 10:16:42
