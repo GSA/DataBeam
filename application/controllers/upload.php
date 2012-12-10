@@ -32,12 +32,28 @@ class Upload extends CI_Controller {
 
 
     public function index() {
-      $this->load->view('upload_view');
+		
+		
+		// if (empty($user)) 	$user = $this->input->get('user', TRUE);		
+
+		if ($this->session->userdata('username')) {	
+		     $this->load->view('upload_view');
+		} else {
+			redirect('login');
+		}
+		
+		
+
    }
 
   
 
     public function upload_file() {
+	
+	
+		if (!$this->session->userdata('username')) {
+			redirect('login');
+		}	
 	
 		function flatten_array(&$item, $key)
 		{ $item = $item[0]; }		
@@ -87,13 +103,21 @@ class Upload extends CI_Controller {
             //Get info 
             $info = new stdClass();
             
-			$username = 'philipashlock'; // hardcoding this for now. 
 
-            $info->name = $name;
+
+			$username = 
+			
+			
+			
+
+
+			$info->username = $this->session->userdata('username');						
+   			$info->name = $this->make_unique_name($name, $info->username); //Do a query to make sure that the dbname is unique, create unique name if needed
+			$info->api = '/' . $username . '/local/' . $info->name;
+			
             $info->size = $data['file_size'];
             $info->type = $data['file_type'];
             $info->url = $this->getPath_img_upload_folder() . $config['file_name'];
-            $info->api = '/' . $username . '/local/' . $name;
             $info->thumbnail_url = $this->getPath_img_upload_folder() . $config['file_name']; //I set this to original file since I did not create thumbs.  change to thumbnail directory if you do = $upload_path_url .'/thumbs' .$name
             $info->delete_url = $this->getDelete_img_url() . $config['file_name'];
             $info->delete_type = 'DELETE';
@@ -128,7 +152,7 @@ class Upload extends CI_Controller {
 			try {
 				$dbh  = new PDO("sqlite:$db_path");
 
-				$stm = "CREATE TABLE $name ($column_headers)";
+				$stm = "CREATE TABLE $info->name ($column_headers)";
 				$dbh->exec($stm);
 
 				foreach ($csv as $row) {
@@ -142,7 +166,7 @@ class Upload extends CI_Controller {
 					$fields_insert = substr($fields_insert, 0, strlen($fields_insert) - 2);
 					
 					
-					$query="INSERT INTO $name VALUES (" . $fields_insert . ')';
+					$query="INSERT INTO $info->name VALUES (" . $fields_insert . ')';
 
 					$dbh->exec($query);
 				}
@@ -155,19 +179,18 @@ class Upload extends CI_Controller {
 			 echo $e->getMessage();
 			}			
 			
-			//echo "Database $name created successfully";			
+			// Everything below should be in a separate function, just doing it inline for now			
 			//$this->save_db_connection()
-			
-			//First should do a query to make sure that the dbname and user_url are unique
+
 			
 				$data = array(
-							'db_name'           => 	$name,
+							'db_name'           => 	$info->name,
 							'name_full'         => 	NULL,
-							'name_url'          => 	$name,
+							'name_url'          => 	$info->name,
 							'name_hash'         => 	$unique_filename,
 							'description'       => 	NULL,
 							'user_id'           => 	1,
-							'user_url'          => 	'philipashlock',
+							'user_url'          => 	$username,
 							'db_username'       => 	NULL,
 							'db_password'       => 	NULL,
 							'db_server'         => 	NULL,
@@ -179,6 +202,8 @@ class Upload extends CI_Controller {
 						);
 			
 			$this->db->insert('db_connections', $data);	
+			
+		
 
 			//return $this->db->get_where('db_connections', array('user_url' => $user_url, 'name_url' => $name_url));				
 				
@@ -220,6 +245,30 @@ class Upload extends CI_Controller {
             return true;
         }
      }
+
+
+
+private function make_unique_name($db_name, $username) {
+	
+			$count = 1;
+			
+	        while($this->check_unique_name($db_name, $username) > 0) {
+				$db_name = $db_name . $count;
+				$count++;
+			}
+	
+	return $db_name;
+}
+
+
+private function check_unique_name($db_name, $username) {
+	
+	$query = $this->db->get_where('db_connections', array('db_name' => $db_name, 'user_url' => $username));
+	
+	return sizeof($query->row_array());	
+
+}
+
 
 public function deleteImage() {
 

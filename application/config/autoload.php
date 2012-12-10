@@ -53,7 +53,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database', 'gitigniter' );
+$autoload['libraries'] = array('database', 'session', 'OAuth2' ); // removed gitigniter
 
 
 /*
