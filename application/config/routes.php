@@ -49,6 +49,7 @@ $route['(:any)/local/(:any)'] = "restdb/router_local/$1/$2"; // 1: user_url, 3: 
 $route['(:any)/(:any)/(:any)'] = "restdb/router/$1/$2/$3"; // 1: user_url, 2: name_url, 3: table name
 
 $route['upload'] = "upload";
+$route['upload/upload_file'] = "upload/upload_file";
 
 
 $route['(:any)'] = "restdb/user_data/$1";
