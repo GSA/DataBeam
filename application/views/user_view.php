@@ -86,10 +86,11 @@
 		?>
 
 		<?php
+		
+		echo '<h1>' . $user['name_full'] . ' APIs</h1>';
+				
 		if (!empty($connections)) {
-			
-			echo '<h1>' . $user['name_full'] . ' APIs</h1>';
-			
+						
 			foreach($connections as $connection) {
 			
 				$db_name = $connection['name_full'];
