@@ -70,41 +70,15 @@
 
 	<div id="body">
 		
-		
-		<?php
-		
-		if ($this->session->userdata('username')) {	
-		?>
-		
-		
-		<a href="/upload">Upload a CSV</a> <br>
-		<a href="/new">Add a Database</a> <br> <br>
-		<a href="/logout">logout</a>		
-		
-		<?php		
-		}
-		?>
 
 		<?php
 		
-		echo '<h1>' . $user['name_full'] . ' APIs</h1>';
+		echo '<h1>Docs for ' . $db['name_full'] . ' API</h1>';
 				
-		if (!empty($connections)) {
-						
-			foreach($connections as $connection) {
-			
-				$db_name = $connection['name_full'];
-				$db_url = $connection['name_url'];
-				$user_url 	= $connection['user_url'];
-				
-				$db_name = (empty($db_name)) ? $db_url : $db_name;				
-				$db_url = ($connection['local']) ? 'local/' . $db_url : $db_url;			
-			
-				echo "<a href=\"/$user_url/$db_url\">$db_name</a> <br>";
-			}
-		}
+
 		?>
 
+		If we generated swagger we'd show that here. Interim could just list tables
 
 	</div>
 

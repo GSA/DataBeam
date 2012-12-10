@@ -51,12 +51,12 @@ $route['(:any)/(:any)/(:any)'] = "restdb/router/$1/$2/$3"; // 1: user_url, 2: na
 $route['upload'] = "upload";
 $route['upload/upload_file'] = "upload/upload_file";
 
-$route['add'] = "restdb/add";
+$route['new'] = "restdb/add";
 
 $route['dashboard'] = "restdb/dashboard";
 
+$route['(:any)/(:any)'] = "restdb/router/$1/$2"; // 1: user_url, 2: name_url,
 $route['(:any)'] = "restdb/dashboard/$1";
-
 
 
 

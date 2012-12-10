@@ -57,14 +57,17 @@ class Restdb extends Db_api {
 															'column_blacklist' 	=> $column_blacklist));				
 			}			
 			
-			
 				
 		
 		} else {
 			
-			$query = $this->get_database($user, $db);			
+			$query = $this->get_database($user, $db);					
+			
+			if(empty($table)) {
+				return $this->show_docs($query->first_row('array'));
+			}						
 						
-			if ($query->num_rows() > 0) {
+			if ($query->num_rows() > 0) {						
 				
 			   	$db_settings = $query->row(0);
 			
@@ -81,7 +84,9 @@ class Restdb extends Db_api {
 															'table_blacklist' 	=> $table_blacklist,
 															'column_blacklist' 	=> $column_blacklist));				
 			}
-			//$config = config_item('args');
+			
+			
+			
 		} 
 		
 		$this->register_db( $db, $config );		
@@ -136,6 +141,16 @@ class Restdb extends Db_api {
 	}
 	
 	
+	public function show_docs($db_config) {
+		
+		$data = array('db' => $db_config);
+		
+		$this->load->view('docs_view', $data);
+		
+		
+	}	
+	
+	
 	private function get_database($user_url, $name_url = null) {
 		
 		$query = array('user_url' => $user_url);		
@@ -160,6 +175,41 @@ class Restdb extends Db_api {
 	public function add_get() {
 		
 		$this->load->view('add_view');
+		
+	}	
+	
+	
+	public function add_post() {
+		
+		if (empty($user) && !$this->session->userdata('username')) {	
+			redirect('login');
+		}		
+						
+		$name_url = $this->slugify($this->input->post('db_name', TRUE));
+				
+		
+			$data = array(
+						'db_name'           => 	$this->input->post('db_name', TRUE),
+						'name_full'         => 	$this->input->post('name_full', TRUE),
+						'name_url'          => 	$name_url,
+						'name_hash'         => 	NULL,
+						'description'       => 	$this->input->post('description', TRUE),
+						'user_id'           => 	1,
+						'user_url'          => 	$this->session->userdata('username'),
+						'db_username'       => 	$this->input->post('db_username', TRUE),
+						'db_password'       => 	$this->input->post('db_password', TRUE),
+						'db_server'         => 	$this->input->post('db_server', TRUE),
+						'db_port'           => 	$this->input->post('db_port', TRUE),
+						'local'             => 	0,
+						'type'              => 	$this->input->post('type', TRUE),
+						'table_blacklist'   => 	$this->input->post('table_blacklist', TRUE),
+						'column_blacklist'  => 	$this->input->post('column_blacklist', TRUE),
+					);
+		
+		$this->db->insert('db_connections', $data);		
+		
+		
+		redirect('/dashboard');
 		
 	}	
 	
