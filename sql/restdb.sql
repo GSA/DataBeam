@@ -97,6 +97,33 @@ LOCK TABLES `api_logs` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `ci_sessions`
+--
+
+DROP TABLE IF EXISTS `ci_sessions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ci_sessions` (
+  `session_id` varchar(40) NOT NULL DEFAULT '0',
+  `ip_address` varchar(45) NOT NULL DEFAULT '0',
+  `user_agent` varchar(120) NOT NULL,
+  `last_activity` int(10) unsigned NOT NULL DEFAULT '0',
+  `user_data` text NOT NULL,
+  PRIMARY KEY (`session_id`),
+  KEY `last_activity_idx` (`last_activity`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ci_sessions`
+--
+
+LOCK TABLES `ci_sessions` WRITE;
+/*!40000 ALTER TABLE `ci_sessions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ci_sessions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `db_connections`
 --
 
@@ -133,6 +160,30 @@ LOCK TABLES `db_connections` WRITE;
 /*!40000 ALTER TABLE `db_connections` DISABLE KEYS */;
 /*!40000 ALTER TABLE `db_connections` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `users_auth`
+--
+
+DROP TABLE IF EXISTS `users_auth`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users_auth` (
+  `user_id` int(8) NOT NULL,
+  `provider_user_id` int(12) NOT NULL,
+  `token` text NOT NULL,
+  `provider` varchar(255) NOT NULL DEFAULT 'github'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users_auth`
+--
+
+LOCK TABLES `users_auth` WRITE;
+/*!40000 ALTER TABLE `users_auth` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users_auth` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -143,4 +194,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-12-07 17:00:50
+-- Dump completed on 2012-12-10  1:58:45
