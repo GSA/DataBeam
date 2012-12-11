@@ -99,7 +99,7 @@ class Auth extends CI_Controller
     }
 
 	public function check_user($username) {
-			$query = $this->db->get_where('users_auth', array('name_url' => $username));
+			$query = $this->db->get_where('users_auth', array('username_url' => $username));
 
 			return sizeof($query->row_array());	
 

@@ -159,7 +159,7 @@ class Restdb extends Db_api {
 	
 	private function get_user($user_url) {
 		
-		$query = array('name_url' => $user_url);		
+		$query = array('username_url' => $user_url);		
 				
 		return $this->db->get_where('users_auth', $query);				
 		
