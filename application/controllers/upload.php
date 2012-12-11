@@ -61,75 +61,50 @@ class Upload extends CI_Controller {
 		
         $name = $_FILES['userfile']['name'];
         $name = strtr($name, 'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ', 'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
+        $name = preg_replace('/([^.a-z0-9]+)/i', '_', $name);
 
-// remplacer les caracteres autres que lettres, chiffres et point par _
+		$_FILES['userfile']['name'] = $name;
 
-         $name = preg_replace('/([^.a-z0-9]+)/i', '_', $name);
-
-        //Your upload directory, see CI user guide
-        $config['upload_path'] = './uploads/'; // $this->getPath_img_upload_folder();
-  
-        $config['allowed_types'] = 'csv'; //'gif|jpg|png|csv|txt|JPG|GIF|PNG|CSV|TXT';
-        $config['max_size'] = '1000';
-        $config['orig_name'] = $name;
-
-		// You can use the name given, or create a random name.
-		// We will create a random name!
-		$unique_filename = substr_replace(sha1(microtime(true)), '', 12);
-		$config['file_name'] = $unique_filename .'.'. end(explode('.', $name));
-        
 		$name = reset(explode('.', $name));
+		$db_hash = substr_replace(sha1(microtime(true)), '', 12);
 
-       //Load the upload library
-        $this->load->library('upload', $config);
 
-       if ($this->do_upload()) {
-            
-            // If you want to resize 
-            // $config['new_image'] = $this->getPath_img_thumb_upload_folder();
-            // $config['image_library'] = 'gd2';
-            // $config['source_image'] = $this->getPath_img_upload_folder() . $name;
-            // $config['create_thumb'] = FALSE;
-            // $config['maintain_ratio'] = TRUE;
-            // $config['width'] = 193;
-            // $config['height'] = 94;
-            // 
-            // $this->load->library('image_lib', $config);
-            // 
-            // $this->image_lib->resize();
+       //Load the upload library, automatically will look for /config/uploads.php for config
+
+	 // If we wanted to load the config stored in an array. 
+	 //$this->config->load('upload', TRUE); // should now be available as an index in $this->config['upload']
+
+        $this->load->library('upload');
+
+		$this->load->helper('restdb'); // used for slugify	
+
+
+       if ($this->do_upload()) {            
 
            $data = $this->upload->data();
 
-            //Get info 
-            $info = new stdClass();
-            
+           //Get info 
+           $info = new stdClass();
 
-
-			$username = 
+		   	$info->username = $this->session->userdata('username');						
+		   	$info->username_url = $this->session->userdata('username_url');
 			
-			
+   			$info->name = $this->make_unique_name($name, $info->username_url); //Do a query to make sure that the dbname is unique, create unique name if needed
+			$info->name_url = slugify($info->name);
 			
 
-
-			$info->username = $this->session->userdata('username');						
-   			$info->name = $this->make_unique_name($name, $info->username); //Do a query to make sure that the dbname is unique, create unique name if needed
-			$info->api = '/' . $username . '/local/' . $info->name;
+			$info->api = '/' . $info->username_url . '/local/' . $info->name_url;
 			
             $info->size = $data['file_size'];
             $info->type = $data['file_type'];
-            $info->url = $this->getPath_img_upload_folder() . $config['file_name'];
-            $info->thumbnail_url = $this->getPath_img_upload_folder() . $config['file_name']; //I set this to original file since I did not create thumbs.  change to thumbnail directory if you do = $upload_path_url .'/thumbs' .$name
-            $info->delete_url = $this->getDelete_img_url() . $config['file_name'];
-            $info->delete_type = 'DELETE';
-
+//          $info->url = $data['file_path'];
 
 			// Parse CSV Data into an array. Todo: better to do db inserts line by line from csv, esp large files
 			$parse_file = file_get_contents($data['full_path']);
 			$csv = array_map("str_getcsv", preg_split('/\r*\n+|\r+/', $parse_file));
-			//$info->data = $csv;
 			
 			// Add CSV data into db. First set db filepath
-			$db_path = $config['upload_path'] . '/db/' . $unique_filename . '.db';
+			$db_path = $this->config->item('sqlite_data_path') . $db_hash . '.db';
 
 			// Check for an existing db file and create (touch) it if needed to initialize new file
 			if(!file_exists($db_path)) touch($db_path);
@@ -186,11 +161,11 @@ class Upload extends CI_Controller {
 				$data = array(
 							'db_name'           => 	$info->name,
 							'name_full'         => 	NULL,
-							'name_url'          => 	$info->name,
-							'name_hash'         => 	$unique_filename,
+							'name_url'          => 	$info->name_url,
+							'name_hash'         => 	$db_hash,
 							'description'       => 	NULL,
 							'user_id'           => 	1,
-							'user_url'          => 	$username,
+							'user_url'          => 	$info->username_url,
 							'db_username'       => 	NULL,
 							'db_password'       => 	NULL,
 							'db_server'         => 	NULL,
@@ -372,8 +347,6 @@ public function deleteImage() {
     public function setDelete_img_url($delete_img_url) {
         $this->delete_img_url = $delete_img_url;
     }
-
-
 
 
 

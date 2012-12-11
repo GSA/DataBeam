@@ -29,13 +29,16 @@ class Restdb extends Db_api {
 			if ($query->num_rows() > 0) {
 
 			   	$db_settings = $query->row(0);
+			
+				$table = $db_settings->db_name;
 
-				$db_path = $_SERVER['DOCUMENT_ROOT'] . '/uploads/db/' . $db_settings->name_hash . '.db';				
+				$db_path = $this->config->item('sqlite_data_path') . $db_settings->name_hash . '.db';
+				$db_path = (substr($db_path, 0, 1) == '/') ? substr($db_path, 1, strlen($db_path) -1) : $db_path; 				
 
 				$table_blacklist = (!empty($table_blacklist)) ? explode(',', $db_settings->table_blacklist) : array();
 				$column_blacklist = (!empty($column_blacklist)) ? explode(',', $db_settings->column_blacklist) : array();								
 
-				$config = array($db_settings->name_url => array(
+				$config = array($db => array(
 															'name' 				=> $db_path,
 															'username' 			=> $db_settings->db_username,
 															'password' 			=> $db_settings->db_password,
@@ -45,8 +48,7 @@ class Restdb extends Db_api {
 															'table_blacklist' 	=> $table_blacklist,
 															'column_blacklist' 	=> $column_blacklist));				
 			}			
-			
-				
+							
 		
 		} else {
 			
@@ -63,7 +65,7 @@ class Restdb extends Db_api {
 				$table_blacklist = (!empty($table_blacklist)) ? explode(',', $db_settings->table_blacklist) : array();
 				$column_blacklist = (!empty($column_blacklist)) ? explode(',', $db_settings->column_blacklist) : array();								
 			
-				$config = array($db_settings->name_url => array(
+				$config = array($db => array(
 															'name' 				=> $db_settings->db_name,
 															'username' 			=> $db_settings->db_username,
 															'password' 			=> $db_settings->db_password,
@@ -78,10 +80,12 @@ class Restdb extends Db_api {
 			
 		} 
 		
+
 		$this->register_db( $db, $config );		
 		//$this->register_custom_sql( 'democracymap', config_item('sql_args') );		
 		
-		$query = array('db' => $db, 'table' => $table);
+		$query = array('db' => $db, 'table' => $table);		
+		
 		$query = $this->parse_query($query);
 		$this->set_db( $query['db'] );
 		$results = $this->query( $query );
@@ -173,8 +177,10 @@ class Restdb extends Db_api {
 		if (empty($user) && !$this->session->userdata('username')) {	
 			redirect('login');
 		}		
+			
+		$this->load->helper('restdb'); // used for slugify	
 						
-		$name_url = $this->slugify($this->input->post('db_name', TRUE));
+		$name_url = slugify($this->input->post('db_name', TRUE));
 				
 		
 			$data = array(
@@ -219,6 +225,7 @@ class Restdb extends Db_api {
 					
 	}
 	
+		
 	
 	
 }

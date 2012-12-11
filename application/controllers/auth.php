@@ -44,7 +44,7 @@ class Auth extends CI_Controller
 								
 				$user_data = array('username' => $user['nickname'],
 								   'name_full' => $user['name'], 
-								   'name_url' => $user['nickname'], 								
+								   'username_url' => $user['nickname'], 								
 								   'provider_url' => $user['urls']['GitHub']);								
 								
 				// check to see if we already have a user in our users_auth table as well as corresponding id in users table that matches the github userid of this person															

@@ -46,7 +46,6 @@ abstract class Db_api extends REST_Controller
 		);
 
 		$args = $this->shortcode_atts( $defaults, $args[$id] );
-		$id = $this->slugify( $id );
 
 		$this->dbs[$id] = (object) $args;
 
@@ -65,7 +64,6 @@ abstract class Db_api extends REST_Controller
 		);
 
 		$args = $this->shortcode_atts( $defaults, $args );
-		$name = $this->slugify( $name );
 
 		$this->custom_sql[$name] = (object) $args;
 
@@ -85,8 +83,7 @@ abstract class Db_api extends REST_Controller
 		if ( is_object( $db ) ) {
 			$db = $db->name;
 		}
-		
-		
+				
 		if ( !array_key_exists( $db, $this->dbs ) ) {
 			$this->error( 'Invalid Database' );
 		}
@@ -115,38 +112,6 @@ abstract class Db_api extends REST_Controller
 	}
 
 
-	/**
-	 * Modifies a string to remove all non-ASCII characters and spaces.
-	 * http://snipplr.com/view.php?codeview&id=22741
-	 */
-	protected function slugify( $text ) {
-
-		// replace non-alphanumeric characters with a hyphen
-		$text = preg_replace('~[^\\pL\d]+~u', '-', $text);
-
-		// trim off any trailing or leading hyphens
-		$text = trim($text, '-');
-
-		// transliterate from UTF-8 to ASCII
-		if (function_exists('iconv')) {
-			$text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-		}
-
-		// lowercase
-		$text = strtolower($text);
-
-		// remove unwanted characters
-		$text = preg_replace('~[^-\w]+~', '', $text);
-
-		// ensure that this slug is unique
-		$i=1;
-		while ( array_key_exists( $text, $this->dbs ) ) {
-			$text .= "-$i";
-			$i++;
-		}
-
-		return $text;
-	}
 
 	/**
 	 * Parses rewrite and actual query var and sanitizes
