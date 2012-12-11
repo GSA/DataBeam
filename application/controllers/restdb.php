@@ -17,12 +17,17 @@ class Restdb extends Db_api {
 		if (empty($table)) 	$table = $this->input->get('table', TRUE);		
 		if (empty($user)) 	$user = $this->input->get('user', TRUE);		
 		if (empty($local)) 	$local = $this->input->get('local', TRUE);		
+
+		$format = $this->_detect_output_format(); 		
+		//echo $this->request->method; exit;
 		
 		// if we don't have a request send them to the upload page
 		if(empty($db)) redirect('/upload');
 		
 		
 		if (!empty($local) && $local == 'true') {
+			
+			if(strpos($db, ".$format")) $db = substr($db, 0, strpos($db, ".$format"));					
 			
 			$query = $this->get_database($user, $db);			
 									
@@ -35,8 +40,8 @@ class Restdb extends Db_api {
 				$db_path = $this->config->item('sqlite_data_path') . $db_settings->name_hash . '.db';
 				$db_path = (substr($db_path, 0, 1) == '/') ? substr($db_path, 1, strlen($db_path) -1) : $db_path; 				
 
-				$table_blacklist = (!empty($table_blacklist)) ? explode(',', $db_settings->table_blacklist) : array();
-				$column_blacklist = (!empty($column_blacklist)) ? explode(',', $db_settings->column_blacklist) : array();								
+				$table_blacklist = (!empty($db_settings->table_blacklist)) ? array_map('trim',explode(',', $db_settings->table_blacklist)) : array();
+				$column_blacklist = (!empty($db_settings->column_blacklist)) ? array_map('trim',explode(',', $db_settings->column_blacklist)) : array();								
 
 				$config = array($db => array(
 															'name' 				=> $db_path,
@@ -52,18 +57,16 @@ class Restdb extends Db_api {
 		
 		} else {
 			
-			$query = $this->get_database($user, $db);					
+			if(!empty($table) && strpos($table, ".$format")) $table = substr($table, 0, strpos($table, ".$format"));					
 			
-			if(empty($table)) {
-				return $this->show_docs($query->first_row('array'));
-			}						
-						
+			$query = $this->get_database($user, $db);								
+												
 			if ($query->num_rows() > 0) {						
 				
 			   	$db_settings = $query->row(0);
-			
-				$table_blacklist = (!empty($table_blacklist)) ? explode(',', $db_settings->table_blacklist) : array();
-				$column_blacklist = (!empty($column_blacklist)) ? explode(',', $db_settings->column_blacklist) : array();								
+						
+				$table_blacklist = (!empty($db_settings->table_blacklist)) ? array_map('trim',explode(',', $db_settings->table_blacklist)) : array();
+				$column_blacklist = (!empty($db_settings->column_blacklist)) ? array_map('trim',explode(',', $db_settings->column_blacklist)) : array();								
 			
 				$config = array($db => array(
 															'name' 				=> $db_settings->db_name,
@@ -74,13 +77,16 @@ class Restdb extends Db_api {
 															'type' 				=> $db_settings->type,
 															'table_blacklist' 	=> $table_blacklist,
 															'column_blacklist' 	=> $column_blacklist));				
+			
+				if(empty($table)) {
+					return $this->show_docs($db, $config, $query->first_row('array'));
+				}			
+			
 			}
-			
-			
+						
 			
 		} 
 		
-
 		$this->register_db( $db, $config );		
 		//$this->register_custom_sql( 'democracymap', config_item('sql_args') );		
 		
@@ -134,9 +140,14 @@ class Restdb extends Db_api {
 	}
 	
 	
-	public function show_docs($db_config) {
+	public function show_docs($db, $db_config, $db_settings) {
+
+		$this->register_db( $db, $db_config );	
+		$tables = $this->allowed_tables($db);
 		
-		$data = array('db' => $db_config);
+		//var_dump($db_settings); exit;
+		
+		$data = array('db' => $db_settings, 'tables' => $tables);
 		
 		$this->load->view('docs_view', $data);
 		

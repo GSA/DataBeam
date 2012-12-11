@@ -10,10 +10,21 @@
 		
 		echo '<h1>Docs for ' . $db['name_full'] . ' API</h1>';
 				
-
+		?>
+		
+		
+		<p>
+		If we generated swagger we'd show that here. Interim just list tables
+		</p>
+		
+		<?php
+				
+		foreach ($tables as $table) {
+			
+			echo "<a href=\"$table\">$table</a> <br>";
+		}
 		?>
 
-		If we generated swagger we'd show that here. Interim could just list tables
 
 
 

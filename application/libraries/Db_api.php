@@ -48,7 +48,9 @@ abstract class Db_api extends REST_Controller
 		$args = $this->shortcode_atts( $defaults, $args[$id] );
 
 		$this->dbs[$id] = (object) $args;
+		
 
+		
 	}
 	
 	/**
@@ -272,27 +274,7 @@ abstract class Db_api extends REST_Controller
 		
 		if ( !$tables  ) {
 		
-			$dbh = &$this->connect( $db );
-			try { 
-					
-				
-				$db_id = $this->get_db( $db )->id;
-				
-				if ($this->get_db( $db )->type == 'sqlite') {
-					$stmt = $dbh->query("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name");					
-				} else {
-					$stmt = $dbh->query( 'SHOW TABLES' );
-				}
-				
-				
-			} catch( PDOException $e ) {
-				echo $e->getMessage();
-			}
-			
-			$tables = array();
-			while ( $table = $stmt->fetch() ) {
-				$tables[] = $table[0];
-			}
+			$tables = $this->allowed_tables($db);
 			
 			//var_dump($tables);
 				
@@ -301,6 +283,48 @@ abstract class Db_api extends REST_Controller
 		return in_array( $query_table, $tables );
 		
 	}
+	
+	
+	/**
+	 * Return list of tables we're allowed to access
+	 */	
+	public function allowed_tables($db = null) {
+
+		$dbh = &$this->connect( $db );
+		try { 
+				
+							
+			if ($this->get_db( $db )->type == 'sqlite') {
+				$stmt = $dbh->query("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name");					
+			} else {
+				$stmt = $dbh->query( 'SHOW TABLES' );
+			}
+			
+			
+		} catch( PDOException $e ) {
+			echo $e->getMessage();
+		}
+		
+		$tables = array();
+		while ( $table = $stmt->fetch() ) {
+			$tables[] = $table[0];
+		}
+
+
+		// remove any blacklisted tables
+		if(!empty($this->dbs[$db]->table_blacklist)) {
+			
+			$tables = array_diff($tables, $this->dbs[$db]->table_blacklist);
+					
+		}
+						
+		return $tables;
+		
+	}
+	
+	
+	
+	
 
 	/**
 	 * Returns an array of all columns in a table
