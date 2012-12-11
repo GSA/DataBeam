@@ -1,4 +1,5 @@
-<!DOCTYPE HTML>
+<?php include 'header_meta_inc_view.php';?>
+
 <!--
 /*
  * jQuery File Upload Plugin Demo 6.11
@@ -11,57 +12,16 @@
  * http://www.opensource.org/licenses/MIT
  */
 -->
-<html lang="en">
-<head>
-<!-- Force latest IE rendering engine or ChromeFrame if installed -->
-<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
-<meta charset="utf-8">
-<title>CSV to API</title>
-<meta name="description" content="File Upload widget with multiple file selection, drag&amp;drop support, progress bar and preview images for jQuery. Supports cross-domain, chunked and resumable file uploads. Works with any server-side platform (Google App Engine, PHP, Python, Ruby on Rails, Java, etc.) that supports standard HTML form file uploads.">
-<meta name="viewport" content="width=device-width">
-<!-- Bootstrap CSS Toolkit styles -->
-<link rel="stylesheet" href="http://blueimp.github.com/cdn/css/bootstrap.min.css">
-<!-- Generic page styles -->
-<link rel="stylesheet" href="/assets/css/style.css">
-<!-- Bootstrap styles for responsive website layout, supporting different screen sizes -->
-<link rel="stylesheet" href="http://blueimp.github.com/cdn/css/bootstrap-responsive.min.css">
-<!-- Bootstrap CSS fixes for IE6 -->
-<!--[if lt IE 7]><link rel="stylesheet" href="http://blueimp.github.com/cdn/css/bootstrap-ie6.min.css"><![endif]-->
-<!-- Bootstrap Image Gallery styles -->
-<link rel="stylesheet" href="http://blueimp.github.com/Bootstrap-Image-Gallery/css/bootstrap-image-gallery.min.css">
+
 <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
 <link rel="stylesheet" href="/assets/css/jquery.fileupload-ui.css">
 <!-- CSS adjustments for browsers with JavaScript disabled -->
 <noscript><link rel="stylesheet" href="/assets/css/jquery.fileupload-ui-noscript.css"></noscript>
-<!-- Shim to make HTML5 elements usable in older Internet Explorer versions -->
-<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-</head>
-<body>
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-            <a class="brand" href="https://github.com/philipashlock/RESTdb">CSV to API</a>
-            <div class="nav-collapse">
-                <ul class="nav">
-                    <li><a href="https://github.com/philipashlock/RESTdb">Source Code</a></li>
-                    <li><a href="https://github.com/blueimp/jQuery-File-Upload/">jQuery File Upload</a></li>
-                    <li><a href="https://github.com/project-open-data/db-to-api">DB to API</a></li>
-                    <li><a href="https://github.com/philsturgeon/codeigniter-restserver">CI REST Server</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container">
-    <div class="page-header">
-        <h1>CSV to API</h1>
-    </div>
-    <br>
+
+<?php include 'header_inc_view.php';?>
+
+<h1>Upload a CSV</h1>
+
     <!-- The file upload form used as target for the file upload widget -->
     <form id="fileupload" action="<?php echo base_url() . 'upload/upload_file'; ?>" method="POST" enctype="multipart/form-data">
         <!-- Redirect browsers with JavaScript disabled to the origin page -->
@@ -126,32 +86,9 @@
 	<p> For more advanced functionality you might be interested in <a href="http://reclinejs.com">Recline.js</a></p>
 
 </div>
-<!-- modal-gallery is the modal dialog used for the image gallery -->
-<div id="modal-gallery" class="modal modal-gallery hide fade" data-filter=":odd" tabindex="-1">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">&times;</a>
-        <h3 class="modal-title"></h3>
-    </div>
-    <div class="modal-body"><div class="modal-image"></div></div>
-    <div class="modal-footer">
-        <a class="btn modal-download" target="_blank">
-            <i class="icon-download"></i>
-            <span>Download</span>
-        </a>
-        <a class="btn btn-success modal-play modal-slideshow" data-slideshow="5000">
-            <i class="icon-play icon-white"></i>
-            <span>Slideshow</span>
-        </a>
-        <a class="btn btn-info modal-prev">
-            <i class="icon-arrow-left icon-white"></i>
-            <span>Previous</span>
-        </a>
-        <a class="btn btn-primary modal-next">
-            <span>Next</span>
-            <i class="icon-arrow-right icon-white"></i>
-        </a>
-    </div>
-</div>
+
+
+
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
@@ -212,7 +149,6 @@
     </tr>
 {% } %}
 </script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
 <script src="/assets/js/vendor/jquery.ui.widget.js"></script>
 <!-- The Templates plugin is included to render the upload/download listings -->
@@ -221,9 +157,7 @@
 <script src="http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js"></script>
 <!-- The Canvas to Blob plugin is included for image resizing functionality -->
 <script src="http://blueimp.github.com/JavaScript-Canvas-to-Blob/canvas-to-blob.min.js"></script>
-<!-- Bootstrap JS and Bootstrap Image Gallery are not required, but included for the demo -->
-<script src="http://blueimp.github.com/cdn/js/bootstrap.min.js"></script>
-<script src="http://blueimp.github.com/Bootstrap-Image-Gallery/js/bootstrap-image-gallery.min.js"></script>
+
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
 <script src="/assets/js/jquery.iframe-transport.js"></script>
 <!-- The basic File Upload plugin -->
@@ -236,5 +170,5 @@
 <script src="/assets/js/main.js"></script>
 <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE8+ -->
 <!--[if gte IE 8]><script src="js/cors/jquery.xdr-transport.js"></script><![endif]-->
-</body> 
-</html>
+
+<?php include 'footer_inc_view.php';?>

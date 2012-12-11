@@ -110,7 +110,7 @@ class Auth extends CI_Controller
 
 	public function logout() {
 		$this->session->sess_destroy();
-		$this->load->view('logout');
+		$this->load->view('logout_view');
 	}
 
 	// need a function to check for login status, I think this can just verify the value of a session variable
