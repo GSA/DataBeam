@@ -6,7 +6,7 @@
 <h1>Connect a Database</h1>
 
 				
-		<form action="/add" method="post">
+		<form action="/new" method="post">
 
 			<label for="name_full">Dataset Name</label>
 			<input type="text" name="name_full" id="name_full">
