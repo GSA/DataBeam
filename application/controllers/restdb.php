@@ -6,6 +6,13 @@ require APPPATH.'/libraries/Db_api.php';
 
 class Restdb extends Db_api {
 
+	var $db_id;
+	var $get_table;
+	var $get_user;
+	var $get_local;
+	var $get_format;	
+
+
 	/**
 	 * Index Page for this controller.
 	 *
@@ -13,84 +20,22 @@ class Restdb extends Db_api {
 	public function index_get($user = null, $db = null, $table = null, $local = null)
 	{
 				
-		if (empty($db)) 	$db = $this->input->get('db', TRUE);
-		if (empty($table)) 	$table = $this->input->get('table', TRUE);		
-		if (empty($user)) 	$user = $this->input->get('user', TRUE);		
-		if (empty($local)) 	$local = $this->input->get('local', TRUE);		
+		$this->db_id  		= (empty($db)) 	  ? $this->input->get('db', TRUE)	 : $db;
+		$this->get_table 	= (empty($table)) ? $this->input->get('table', TRUE) : $table;		
+		$this->get_user 	= (empty($user))  ? $this->input->get('user', TRUE)	 : $user;		
+		$this->get_local	= (empty($local)) ? $this->input->get('local', TRUE) : $local;		
+		$this->get_format 	= $this->_detect_output_format(); 	
+														
+		$get_db = $this->prepare_db();
 
-		$format = $this->_detect_output_format(); 		
-		//echo $this->request->method; exit;
+		if($this->get_local !== 'true' && empty($this->get_table)) {
+			return $this->show_docs($this->db_id, $get_db['config'], $get_db['db_settings']);
+		}
 		
-		// if we don't have a request send them to the upload page
-		if(empty($db)) redirect('/upload');
-		
-		
-		if (!empty($local) && $local == 'true') {
-			
-			if(strpos($db, ".$format")) $db = substr($db, 0, strpos($db, ".$format"));					
-			
-			$query = $this->get_database($user, $db);			
-									
-			if ($query->num_rows() > 0) {
-
-			   	$db_settings = $query->row(0);
-			
-				$table = $db_settings->db_name;
-
-				$db_path = $this->config->item('sqlite_data_path') . $db_settings->name_hash . '.db';
-				$db_path = (substr($db_path, 0, 1) == '/') ? substr($db_path, 1, strlen($db_path) -1) : $db_path; 				
-
-				$table_blacklist = (!empty($db_settings->table_blacklist)) ? array_map('trim',explode(',', $db_settings->table_blacklist)) : array();
-				$column_blacklist = (!empty($db_settings->column_blacklist)) ? array_map('trim',explode(',', $db_settings->column_blacklist)) : array();								
-
-				$config = array($db => array(
-															'name' 				=> $db_path,
-															'username' 			=> $db_settings->db_username,
-															'password' 			=> $db_settings->db_password,
-															'server' 			=> $db_settings->db_server,
-															'port' 				=> $db_settings->db_port,
-															'type' 				=> $db_settings->type,
-															'table_blacklist' 	=> $table_blacklist,
-															'column_blacklist' 	=> $column_blacklist));				
-			}			
-							
-		
-		} else {
-			
-			if(!empty($table) && strpos($table, ".$format")) $table = substr($table, 0, strpos($table, ".$format"));					
-			
-			$query = $this->get_database($user, $db);								
-												
-			if ($query->num_rows() > 0) {						
-				
-			   	$db_settings = $query->row(0);
-						
-				$table_blacklist = (!empty($db_settings->table_blacklist)) ? array_map('trim',explode(',', $db_settings->table_blacklist)) : array();
-				$column_blacklist = (!empty($db_settings->column_blacklist)) ? array_map('trim',explode(',', $db_settings->column_blacklist)) : array();								
-			
-				$config = array($db => array(
-															'name' 				=> $db_settings->db_name,
-															'username' 			=> $db_settings->db_username,
-															'password' 			=> $db_settings->db_password,
-															'server' 			=> $db_settings->db_server,
-															'port' 				=> $db_settings->db_port,
-															'type' 				=> $db_settings->type,
-															'table_blacklist' 	=> $table_blacklist,
-															'column_blacklist' 	=> $column_blacklist));				
-			
-				if(empty($table)) {
-					return $this->show_docs($db, $config, $query->first_row('array'));
-				}			
-			
-			}
-						
-			
-		} 
-		
-		$this->register_db( $db, $config );		
+		$this->register_db( $this->db_id, $get_db['config'] );		
 		//$this->register_custom_sql( 'democracymap', config_item('sql_args') );		
 		
-		$query = array('db' => $db, 'table' => $table);		
+		$query = array('db' => $this->db_id, 'table' => $this->get_table);		
 		
 		$query = $this->parse_query($query);
 		$this->set_db( $query['db'] );
@@ -100,7 +45,60 @@ class Restdb extends Db_api {
 	}
 	
 	
-	
+
+
+	private function prepare_db() {
+		
+		if ($this->get_local == 'true') {
+			if(strpos($this->db_id, ".$this->get_format")) $this->db_id = substr($this->db_id, 0, strpos($this->db_id, ".$this->get_format"));								
+		} else {
+			if(!empty($this->get_table) && strpos($this->get_table, ".$this->get_format")) $this->get_table = substr($this->get_table, 0, strpos($this->get_table, ".$this->get_format"));								
+		}
+
+		$query = $this->get_database($this->get_user, $this->db_id);			
+
+		if ($query->num_rows() > 0) {
+
+		   	$db_settings = $query->first_row('array');
+
+			if ($this->get_local == 'true') {
+				
+				$this->get_table = $db_settings['db_name']; 
+				
+				$db_name = $this->config->item('sqlite_data_path') . $db_settings['name_hash'] . '.db';
+				$db_name = (substr($db_name, 0, 1) == '/') ? substr($db_name, 1, strlen($db_name) -1) : $db_name;
+				
+			} else {
+				$db_name = $db_settings['db_name'];
+			}
+							
+
+			$table_blacklist  = (!empty($db_settings['table_blacklist']))  ? array_map('trim', explode(',', $db_settings['table_blacklist'])) : array();
+			$column_blacklist = (!empty($db_settings['column_blacklist'])) ? array_map('trim',explode(',', $db_settings['column_blacklist'])) : array();							
+
+			$config = array($this->db_id => array(
+														'name' 				=> $db_name,
+														'username' 			=> $db_settings['db_username'],
+														'password' 			=> $db_settings['db_password'],
+														'server' 			=> $db_settings['db_server'],
+														'port' 				=> $db_settings['db_port'],
+														'type' 				=> $db_settings['type'],
+														'table_blacklist' 	=> $table_blacklist,
+														'column_blacklist' 	=> $column_blacklist), 
+														'ttl' 				=> null);			
+		}		
+		
+		
+		
+		
+		
+		$prepare_db = array('db_id' 			=> $this->db_id, 
+							'config' 			=> $config, 
+							'db_settings' 		=> $db_settings);
+						
+		return $prepare_db;				
+		
+	}	
 	
 	
 	
@@ -140,10 +138,10 @@ class Restdb extends Db_api {
 	}
 	
 	
-	public function show_docs($db, $db_config, $db_settings) {
+	public function show_docs($db_id, $db_config, $db_settings) {
 
-		$this->register_db( $db, $db_config );	
-		$tables = $this->allowed_tables($db);
+		$this->register_db( $db_id, $db_config );	
+		$tables = $this->allowed_tables($db_id);
 		
 		//var_dump($db_settings); exit;
 		
@@ -151,7 +149,26 @@ class Restdb extends Db_api {
 		
 		$this->load->view('docs_view', $data);
 		
+		// As swagger docs
+		// $this->load->model('swagger_model', 'swagger');
+		// 
+		// $this->swagger->swaggerVersion = "1.1";
+		// $this->swagger->basePath = current_url();
+		// $this->swagger->apis[0]['path'] = '/' . json_encode($tables);
+		// $this->swagger->apis[0]['operations'][0]['httpMethod'] = 'GET';		
+		// $this->swagger->apis[0]['operations'][0]['httpMethod'] = 'GET';				
+		// 
+		// $this->response($this->swagger, 200);
 		
+	}	
+	
+	
+	public function swagger_get($user_url = null, $name_url = null) {
+		
+		$this->load->model('swagger_model', 'swagger');
+		
+		$this->response($this->swagger, 200);
+
 	}	
 	
 	
@@ -218,7 +235,6 @@ class Restdb extends Db_api {
 		redirect('/dashboard');
 		
 	}	
-	
 	
 
 	public function router_get($user_url = null, $name_url = null, $table_name = null) {								
