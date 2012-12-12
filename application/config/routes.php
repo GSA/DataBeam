@@ -46,6 +46,7 @@ $route['logout'] = "auth/logout";
 
 $route['auth/session/(:any)'] = "auth/session/$1";
 $route['(:any)/local/(:any)'] = "restdb/router_local/$1/$2"; // 1: user_url, 3: name_url
+$route['(:any)/(:any)/api-docs(:any)'] = "restdb/swagger/$1/$2"; // 1: user_url, 2: name_url,
 $route['(:any)/(:any)/(:any)'] = "restdb/router/$1/$2/$3"; // 1: user_url, 2: name_url, 3: table name
 
 $route['upload'] = "upload";
