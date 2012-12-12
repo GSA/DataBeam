@@ -14,9 +14,12 @@
         <a class="brand" href="/">RestDB</a>
         <div class="nav-collapse collapse">
           <ul class="nav">
-            <li class="active"><a href="/">Download</a></li>
-            <li><a href="/">Developers</a></li>
-            <li><a href="/">About</a></li>
+			
+			<?php $page_title = (!empty($page['title'])) ? $page['title'] : null?>
+			
+            <li<?php if($page_title == 'Download') echo ' class="active"'?>><a href="/">Download</a></li>
+            <li<?php if($page_title == 'Developers') echo ' class="active"'?>><a href="/">Developers</a></li>
+            <li<?php if($page_title == 'About') echo ' class="active"'?>><a href="/">About</a></li>
           </ul>
 
 	    <div class="pull-right">
@@ -28,11 +31,11 @@
 				
 				
 				
-				<a class="btn btn-small btn-inverse" href="/dashboard"><i class="icon-list-alt icon-white"></i> Your APIs</a>
+				<a class="btn btn-small btn-inverse<?php if($page_title == 'Your APIs') echo ' active'?>" href="/dashboard"><i class="icon-list-alt icon-white"></i> Your APIs</a>
 				
 				<div class="btn-group">
-					<a class="btn btn-small btn-inverse" href="/upload"><i class="icon-file icon-white"></i> Upload CSV</a>
-					<a class="btn btn-small btn-inverse" href="/new"><i class="icon-hdd icon-white"></i> Connect Database</a>					
+					<a class="btn btn-small btn-inverse<?php if($page_title == 'Upload a CSV') echo ' active'?>" href="/upload"><i class="icon-file icon-white"></i> Upload CSV</a>
+					<a class="btn btn-small btn-inverse<?php if($page_title == 'Connect a Database') echo ' active'?>" href="/new"><i class="icon-hdd icon-white"></i> Connect Database</a>					
 				</div>
 				
 				<div class="btn-group">

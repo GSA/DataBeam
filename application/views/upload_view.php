@@ -18,7 +18,11 @@
 <!-- CSS adjustments for browsers with JavaScript disabled -->
 <noscript><link rel="stylesheet" href="/assets/css/jquery.fileupload-ui-noscript.css"></noscript>
 
-<?php include 'header_inc_view.php';?>
+<?php 
+
+$page = array('title' => 'Upload a CSV');
+
+include 'header_inc_view.php';?>
 
 <h1>Upload a CSV</h1>
 

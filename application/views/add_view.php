@@ -1,6 +1,10 @@
 <?php include 'header_meta_inc_view.php';?>
 
-<?php include 'header_inc_view.php';?>
+<?php 
+
+$page = array('title' => 'Connect a Database');
+
+include 'header_inc_view.php';?>
 
 
 <h1>Connect a Database</h1>

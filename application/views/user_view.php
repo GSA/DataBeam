@@ -1,6 +1,14 @@
 <?php include 'header_meta_inc_view.php';?>
 
-<?php include 'header_inc_view.php';?>
+
+
+<?php 
+
+$page = array('title' => 'Your APIs');
+
+include 'header_inc_view.php';
+
+?>
 		
 	
 
