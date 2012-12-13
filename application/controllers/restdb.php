@@ -163,12 +163,44 @@ class Restdb extends Db_api {
 	}	
 	
 	
-	public function swagger_get($user_url = null, $name_url = null) {
+	public function swagger_get($user = null, $db = null) {
+
+		$this->db_id  		= (empty($db)) 	  ? $this->input->get('db', TRUE)	 : $db;
+		$this->get_user 	= (empty($user))  ? $this->input->get('user', TRUE)	 : $user;
 		
+		$get_db = $this->prepare_db();
+				
+		$this->register_db( $this->db_id, $get_db['config'] );		
+			
+		$tables = $this->allowed_tables($this->db_id);
+
 		$this->load->model('swagger_model', 'swagger');
+
+		$this->swagger->swaggerVersion = "1.1";
+		
+		$basePath = (strpos(current_url(), '/api-docs')) ? substr(current_url(), 0, strpos(current_url(), '/api-docs')) : current_url();
+		//$basePath = (substr($basePath, -1) == '/') ? $basePath = substr($basePath, 0, -1) : $basePath;
+		$this->swagger->basePath = $basePath;
+		
+		$this->swagger->apis = array();
+		
+		foreach($tables as $table) {
+			$api = $this->swagger->api();
+			
+			$api['path'] = '/' . $table;
+			
+			$operations = $this->swagger->operations();			
+			$operations['httpMethod'] = 'GET';	
+			
+			$api['operations'] = array($operations);
+			
+			$this->swagger->apis[] = $api;
+			
+		}
+			
 		
 		$this->response($this->swagger, 200);
-
+		
 	}	
 	
 	
