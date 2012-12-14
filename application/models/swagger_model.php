@@ -6,6 +6,7 @@ class Swagger_model extends CI_Model {
 	var $apiVersion 	= NULL;
 	var $swaggerVersion	= NULL;
 	var $basePath	 	= NULL;
+	var $resourcePath 	= NULL;
 	var $apis 			= array();
 
 

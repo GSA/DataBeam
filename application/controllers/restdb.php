@@ -61,10 +61,9 @@ class Restdb extends Db_api {
 
 		   	$db_settings = $query->first_row('array');
 
-			if ($this->get_local == 'true') {
+			if ($db_settings['local']) {
 				
 				$this->get_table = $db_settings['db_name']; 
-				
 				$db_name = $this->config->item('sqlite_data_path') . $db_settings['name_hash'] . '.db';
 				$db_name = (substr($db_name, 0, 1) == '/') ? substr($db_name, 1, strlen($db_name) -1) : $db_name;
 				
@@ -103,8 +102,15 @@ class Restdb extends Db_api {
 	
 	
 	public function dashboard_get($user = null) {
+					
+			$data = $this->get_user_dbs($user);	
+			$this->load->view('user_view', $data);
 		
-			
+		
+	}
+	
+	private function get_user_dbs($user = null) {
+		
 		if (empty($user) && !$this->session->userdata('username')) {	
 			redirect('login');
 		}			
@@ -114,26 +120,24 @@ class Restdb extends Db_api {
 		}
 
 
-			// Prepare output data
-			$data = array();			
-			
-			// Get user data
-			$query = $this->get_user($user);			
-									
-			if ($query->num_rows() > 0) {
-				$data['user'] = $query->first_row('array');
-			}			
-			
-			// Then check for database entries for that user			
-			$query = $this->get_database($user);			
-									
-			if ($query->num_rows() > 0) {
-				$data['connections'] = $query->result_array();
-			}		
-			
-			
-			$this->load->view('user_view', $data);
+		// Prepare output data
+		$data = array();			
 		
+		// Get user data
+		$query = $this->get_user($user);			
+								
+		if ($query->num_rows() > 0) {
+			$data['user'] = $query->first_row('array');
+		}			
+		
+		// Then check for database entries for that user			
+		$query = $this->get_database($user);			
+								
+		if ($query->num_rows() > 0) {
+			$data['connections'] = $query->result_array();
+		}
+				
+		return $data;					
 		
 	}
 	
@@ -149,17 +153,6 @@ class Restdb extends Db_api {
 		
 		$this->load->view('docs_view', $data);
 		
-		// As swagger docs
-		// $this->load->model('swagger_model', 'swagger');
-		// 
-		// $this->swagger->swaggerVersion = "1.1";
-		// $this->swagger->basePath = current_url();
-		// $this->swagger->apis[0]['path'] = '/' . json_encode($tables);
-		// $this->swagger->apis[0]['operations'][0]['httpMethod'] = 'GET';		
-		// $this->swagger->apis[0]['operations'][0]['httpMethod'] = 'GET';				
-		// 
-		// $this->response($this->swagger, 200);
-		
 	}	
 	
 	
@@ -167,36 +160,94 @@ class Restdb extends Db_api {
 
 		$this->db_id  		= (empty($db)) 	  ? $this->input->get('db', TRUE)	 : $db;
 		$this->get_user 	= (empty($user))  ? $this->input->get('user', TRUE)	 : $user;
-		
-		$get_db = $this->prepare_db();
-				
-		$this->register_db( $this->db_id, $get_db['config'] );		
-			
-		$tables = $this->allowed_tables($this->db_id);
 
+		// These lines might not be necessary, but including just to be safe
+		$this->get_format 	= (empty($table)) ? $this->_detect_output_format() : $table;		 			
+		
+		// Start constructing the Swagger Model
 		$this->load->model('swagger_model', 'swagger');
-
 		$this->swagger->swaggerVersion = "1.1";
+		$this->swagger->apiVersion = "0.1";
+
 		
-		$basePath = (strpos(current_url(), '/api-docs')) ? substr(current_url(), 0, strpos(current_url(), '/api-docs')) : current_url();
-		//$basePath = (substr($basePath, -1) == '/') ? $basePath = substr($basePath, 0, -1) : $basePath;
-		$this->swagger->basePath = $basePath;
+		$basePath = (strpos(current_url(), '/api-docs')) ? substr(current_url(), 0, strpos(current_url(), '/api-docs')) : current_url();		
 		
-		$this->swagger->apis = array();
-		
-		foreach($tables as $table) {
-			$api = $this->swagger->api();
+		if(empty($this->db_id)) {
 			
-			$api['path'] = '/' . $table;
+			$user = $this->get_user_dbs($user);
+			$resources = $user['connections'];
 			
-			$operations = $this->swagger->operations();			
-			$operations['httpMethod'] = 'GET';	
+
+			$this->swagger->basePath = $basePath; //substr($basePath, 0, strrpos($basePath, '/'));			
+			unset($this->swagger->resourcePath);
 			
-			$api['operations'] = array($operations);
+			$this->swagger->apis = array();
+			$api = $this->swagger->api();			
 			
-			$this->swagger->apis[] = $api;
+			foreach($resources as $resource) {
+				
+				$api['path'] = '/api-docs.{format}/' . $resource['name_url'];
+				$api['description'] = (!empty($resource['description'])) ? $resource['description'] : '';
+				unset($api['operations']);
+
+				$this->swagger->apis[] = $api;				
+				
+			}
 			
 		}
+		else {
+
+			if(strpos($this->db_id, ".$this->get_format")) $this->db_id = substr($this->db_id, 0, strpos($this->db_id, ".$this->get_format"));								
+
+
+			$get_db = $this->prepare_db();
+
+			$db_settings = $get_db['db_settings'];
+
+			if ($db_settings['local']) {
+				$this->get_table = $db_settings['db_name']; 
+			}
+
+			$this->register_db( $this->db_id, $get_db['config'] );		
+
+			$tables = $this->allowed_tables($this->db_id);
+
+			$basePath = (strpos(current_url(), '/api-docs')) ? substr(current_url(), 0, strpos(current_url(), '/api-docs')) : current_url();
+
+			$this->swagger->basePath = $basePath; //substr($basePath, 0, strrpos($basePath, '/'));			
+			$this->swagger->resourcePath = substr(current_url(), strrpos(current_url(), '/'));			
+
+			$this->swagger->apis = array();
+			$api = $this->swagger->api();
+
+			foreach($tables as $table) {
+
+				$api['path'] = '/' . $table;
+				$api['description'] = '';
+
+				$operations = $this->swagger->operations();			
+				$operations['httpMethod'] = 'GET';	
+				$operations['nickname'] = $table;			
+				$operations['responseClass'] = 'string';							
+				$operations['summary'] = '';
+
+				unset($operations['notes']);
+				unset($operations['parameters']);
+				unset($operations['errorResponses']);	
+				
+					
+				
+				$api['operations'] = array($operations);
+			
+				
+
+				$this->swagger->apis[] = $api;
+
+			}
+			
+		}
+		
+		
 			
 		
 		$this->response($this->swagger, 200);
