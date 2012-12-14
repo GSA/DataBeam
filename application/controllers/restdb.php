@@ -222,7 +222,7 @@ class Restdb extends Db_api {
 
 			foreach($tables as $table) {
 
-				$api['path'] = '/' . $table;
+				$api['path'] = $this->swagger->resourcePath . '/' . $table . '.{format}';
 				$api['description'] = '';
 
 				$operations = $this->swagger->operations();			
