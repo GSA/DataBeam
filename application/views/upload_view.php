@@ -76,18 +76,6 @@ include 'header_inc_view.php';?>
 
     </div>
 
-	<h4>Details</h4>
-    <ul>
-        <li>File Upload widget with multiple file selection, drag&amp;drop support, progress bars and preview images for jQuery.</li>
-        <li>Supports cross-domain, chunked and resumable file uploads and client-side image resizing.</li>
-        <li>Front-end can be used with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads. </li>		
-		<li>Current backend utilizes SQLite for each csv uploaded, DB-to-API for arbitrary queries using GET, and CI REST Server for API logging, 
-			key management, format transformations and other common API features.
-		</li>
-    </ul>
-
-	<h4>Further Reading</h4>
-	<p> For more advanced functionality you might be interested in <a href="http://reclinejs.com">Recline.js</a></p>
 
 </div>
 
