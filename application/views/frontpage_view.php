@@ -2,8 +2,6 @@
 
 <?php include 'header_inc_view.php';?>
 
-
-
 <h1>Welcome to RestDB</h1>
 		
 		<h2>RestDB allows you to automatically turn any CSV or database into an API</h2>
@@ -20,9 +18,17 @@
 			<li>You get API key management (soon)</li>
 	    </ul>
 
+		<h4 style="margin-top : 2em">Requirements</h4>
+        <ul>
+            <li>PHP 5.3</li>
+            <li>MySQL (for storing user data and connection settings)</li>
+            <li>SQLite (for storing CSV data)</li>
+            <li>Any <a href="http://php.net/manual/en/pdo.drivers.php">PDO capable database</a> (for external database connections)</li>
+        </ul>	
+	
 		
-		<h4>This project builds off of the following codebases:</h4>
-        <ul class="nav">
+		<h4 style="margin-top : 2em">This project builds off of the following codebases:</h4>
+        <ul>
             <li><a href="https://github.com/project-open-data/db-to-api">DB to API</a></li>
             <li><a href="https://github.com/philsturgeon/codeigniter-restserver">CI REST Server</a></li>
             <li><a href="https://github.com/philsturgeon/codeigniter-oauth2">CI oAuth2</a></li>
@@ -31,24 +37,25 @@
             <li><a href="http://twitter.github.com/bootstrap/">Bootstrap</a></li>
         </ul>		
 		
-		<h4>To Do</h4>
+		<h4 style="margin-top : 2em">To Do</h4>
 	    <ul>
 			<li>Provide developer documentation for installation and contributions. Provide better user documentation and feature listing</li>	
 		    <li>Implement better caching - it's barely implemented at all right now</li>	
 		    <li>Implement a UI for custom SQL queries - the backend for this is already in place</li>			
 		    <li>Implement pagination by default and provide some configurable options per database</li>	
+		    <li>Implement more robust CSV handling and even queuing for batch uploads</li>			
 			<li>Implement API management features like API key provisioning. Backend for this mostly in place already</li>		
 	        <li><del>Implement a real user interface, eg actual do some web design</del> - could still use more work</li>
 		    <li><del>Implement a form for adding new databases. Backend functionality already works for this </del></li>
 	        <li><del>Auto-generate <a href="http://swagger.wordnik.com/">Swagger</a> schema and show interactive documentation. Allow user to edit some of this per database</del></li>			
 	    </ul>		
 
-		<h4>Who &amp; Where</h4>
+		<h4 style="margin-top : 2em">Who &amp; Where</h4>
 		<ul>
 			<li><a href="https://github.com/philipashlock/RESTdb">Source Code</a> being hacked on by <a href="http://twitter.com/philipashlock">Philip Ashlock</a></li>		
 		</ul>
 		
-		<h4>Further Reading</h4>
+		<h4 style="margin-top : 2em">Further Reading</h4>
 		<p> For more advanced direct data interaction you might also be interested in <a href="http://reclinejs.com">Recline.js</a>. Since it's a front-end layer Recline.js could also be included as part of the RestDB UI.</p>		
 
 
