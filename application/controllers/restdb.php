@@ -232,11 +232,26 @@ class Restdb extends Db_api {
 				$operations = $this->swagger->operations();			
 				$operations['httpMethod'] = 'GET';	
 				$operations['nickname'] = $this->get_table;			
-				$operations['responseClass'] = 'string';							
-				$operations['summary'] = '';
+				$operations['dataType'] = 'string';							
+				$operations['required'] = 'false';
+
+				// Parameters
+				$p_column = $this->swagger->parameters();				
+				$p_column['paramType'] 		= 'query';
+				$p_column['name'] 			= 'column';				
+				$p_column['description'] 	= 'A field (column name) in the table';								
+				$p_column['required'] 		= 'false';																
+				$p_column['dataType']	 	= 'String';											
+				$p_column['allowMultiple'] 	= 'false';	
+				
+				$p_value = $p_column;
+				$p_value['name'] 			= 'value';				
+				$p_value['description'] 	= 'A value within the specified column';								
+												
+
+				$operations['parameters'] = array($p_column, $p_value);
 
 				unset($operations['notes']);
-				unset($operations['parameters']);
 				unset($operations['errorResponses']);	
 			
 				$api['operations'] = array($operations);
