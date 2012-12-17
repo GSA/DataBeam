@@ -20,7 +20,7 @@ abstract class Db_api extends REST_Controller
 		//self::$instance = &$this;
 
 		// Lets grab the config and get ready to party
-		$this->load->config('dbapi');
+		//$this->load->config('dbapi');
 
 	}
 
