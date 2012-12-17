@@ -41,10 +41,15 @@
        }
    </style>
 
+
+<?php
+$discovery_url = '/' . $db['user_url'] . '/api-docs.json/' . $db['name_url'];
+?>
+
    <script type="text/javascript">
        $(function () {
            window.swaggerUi = new SwaggerUi({
-               discoveryUrl:"http://restdb.dev/philipashlock/api-docs.json",
+               discoveryUrl:"<?php echo $discovery_url; ?>",
                apiKey:"api-key",
                dom_id:"swagger-ui-container",
                supportHeaderParams: false,
@@ -63,7 +68,7 @@
                        console.log(data);
                    }
                },
-               docExpansion: "none"
+               docExpansion: "full"
            });
 
            window.swaggerUi.load();
@@ -77,8 +82,7 @@
 
 		
 
-		<?php
-		
+		<?php		
 		echo '<h1>Docs for ' . $db['name_full'] . ' API</h1>';
 				
 		?>
