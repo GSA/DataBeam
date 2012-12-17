@@ -29,7 +29,7 @@ include 'header_inc_view.php';
 				$db_name = (empty($db_name)) ? $db_url : $db_name;				
 			
 			if($connection['local']) {
-				$db_url = 'local/' . $db_url;
+				//$db_url = 'local/' . $db_url;
 				$icon = 'icon-file';
 			} else {
 				$icon = 'icon-hdd';

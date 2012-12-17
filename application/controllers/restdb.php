@@ -25,10 +25,13 @@ class Restdb extends Db_api {
 		$this->get_user 	= (empty($user))  ? $this->input->get('user', TRUE)	 : $user;		
 		$this->get_local	= (empty($local)) ? $this->input->get('local', TRUE) : $local;		
 		$this->get_format 	= $this->_detect_output_format(); 	
-														
+		
+		// This separates what's set with the URI vs the settings pulled from the database with prepare_db which distinguishes if we're showing docs or the actual api
+		$showdocs = ($this->get_local == 'true') ? false : null;
+																
 		$get_db = $this->prepare_db();
 
-		if($this->get_local !== 'true' && empty($this->get_table)) {
+		if( (($showdocs !== false) && ($this->get_local == 'true')) || empty($this->get_table) ) {
 			return $this->show_docs($this->db_id, $get_db['config'], $get_db['db_settings']);
 		}
 		
@@ -63,6 +66,7 @@ class Restdb extends Db_api {
 
 			if ($db_settings['local']) {
 				
+				$this->get_local = 'true';
 				$this->get_table = $db_settings['db_name']; 
 				$db_name = $this->config->item('sqlite_data_path') . $db_settings['name_hash'] . '.db';
 				$db_name = (substr($db_name, 0, 1) == '/') ? substr($db_name, 1, strlen($db_name) -1) : $db_name;
@@ -197,52 +201,74 @@ class Restdb extends Db_api {
 		}
 		else {
 
-			if(strpos($this->db_id, ".$this->get_format")) $this->db_id = substr($this->db_id, 0, strpos($this->db_id, ".$this->get_format"));								
-
-
-			$get_db = $this->prepare_db();
-
-			$db_settings = $get_db['db_settings'];
-
-			if ($db_settings['local']) {
-				$this->get_table = $db_settings['db_name']; 
+			if(strpos($this->db_id, ".$this->get_format")) {
+				$this->db_id = substr($this->db_id, 0, strpos($this->db_id, ".$this->get_format"));								
 			}
 
-			$this->register_db( $this->db_id, $get_db['config'] );		
 
-			$tables = $this->allowed_tables($this->db_id);
 
 			$basePath = (strpos(current_url(), '/api-docs')) ? substr(current_url(), 0, strpos(current_url(), '/api-docs')) : current_url();
-
-			$this->swagger->basePath = $basePath; //substr($basePath, 0, strrpos($basePath, '/'));			
+			$this->swagger->basePath = $basePath; //substr($basePath, 0, strrpos($basePath, '/'));	
 			$this->swagger->resourcePath = substr(current_url(), strrpos(current_url(), '/'));			
+
+			$get_db = $this->prepare_db();
+			$db_settings = $get_db['db_settings'];			
 
 			$this->swagger->apis = array();
 			$api = $this->swagger->api();
 
-			foreach($tables as $table) {
 
-				$api['path'] = $this->swagger->resourcePath . '/' . $table . '.{format}';
+			if ($db_settings['local']) {
+				
+				$this->get_table = $db_settings['name_url']; 
+				$this->swagger->resourcePath = '/local';
+				
+				$api['path'] = $this->swagger->resourcePath . '/' . $this->get_table . '.{format}';
 				$api['description'] = '';
 
 				$operations = $this->swagger->operations();			
 				$operations['httpMethod'] = 'GET';	
-				$operations['nickname'] = $table;			
+				$operations['nickname'] = $this->get_table;			
 				$operations['responseClass'] = 'string';							
 				$operations['summary'] = '';
 
 				unset($operations['notes']);
 				unset($operations['parameters']);
 				unset($operations['errorResponses']);	
-				
-					
-				
-				$api['operations'] = array($operations);
 			
+				$api['operations'] = array($operations);
+		
+
+				$this->swagger->apis[] = $api;				
+				
+				
+			} else {
+
+				$this->register_db( $this->db_id, $get_db['config'] );		
+				$tables = $this->allowed_tables($this->db_id);
+
+				foreach($tables as $table) {
 				
 
-				$this->swagger->apis[] = $api;
+					$api['path'] = $this->swagger->resourcePath . '/' . $table . '.{format}';
+					$api['description'] = '';
 
+					$operations = $this->swagger->operations();			
+					$operations['httpMethod'] = 'GET';	
+					$operations['nickname'] = $table;			
+					$operations['responseClass'] = 'string';							
+					$operations['summary'] = '';
+
+					unset($operations['notes']);
+					unset($operations['parameters']);
+					unset($operations['errorResponses']);	
+				
+					$api['operations'] = array($operations);
+			
+
+					$this->swagger->apis[] = $api;
+
+				}
 			}
 			
 		}
