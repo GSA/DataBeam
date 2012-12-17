@@ -40,6 +40,11 @@ include 'header_inc_view.php';
 			
 			echo '</table>';
 			
+		} else {
+?>
+		<p>
+			You haven't added any datasets yet. You can start by either <a href="/upload">Uploading a CSV</a> or <a href="/new">Connecting a Database</a>.
+<?php
 		}
 		?>
 

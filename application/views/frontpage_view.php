@@ -19,6 +19,8 @@
 	    </ul>
 
 		<h4 style="margin-top : 2em">Requirements</h4>
+		
+		<p>Each instance is meant to be multiuser with Github for user authentication and you're free to use this instance by <a href="/login">logging in</a>, but it's also very easy to install your own copy with these basic requirements:</p>
         <ul>
             <li>PHP 5.3</li>
             <li>MySQL (for storing user data and connection settings)</li>

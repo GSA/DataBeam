@@ -115,6 +115,8 @@ class Restdb extends Db_api {
 	
 	private function get_user_dbs($user = null) {
 		
+		$this->load->helper('restdb'); // used for properize
+		
 		if (empty($user) && !$this->session->userdata('username')) {	
 			redirect('login');
 		}			
@@ -132,6 +134,7 @@ class Restdb extends Db_api {
 								
 		if ($query->num_rows() > 0) {
 			$data['user'] = $query->first_row('array');
+			$data['user']['name_full'] = properize($data['user']['name_full']);
 		}			
 		
 		// Then check for database entries for that user			

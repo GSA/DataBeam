@@ -27,4 +27,9 @@
 	return $text;
 }
 
+
+function properize($string) {
+  return $string.'\''.($string[strlen($string) - 1] != 's' ? 's' : '');
+}
+
 ?>
