@@ -1,4 +1,4 @@
-Database to API
+RESTdb
 =======================
 
 Dynamically generate RESTful APIs from the contents of database tables or CSV files. Provides JSON, XML, CSV, and HTML output. Supports most popular databases.
@@ -15,15 +15,32 @@ RESTdb acts as an interface allowing users to interact with that database as if 
 
 When Alternative PHP Cache (APC) is installed, parsed data is stored within APC, which substantially accelerates its functionality.
 
+Features
+--------
+* Each new CSV or database connection creates a new REST API endpoint with output as json, jsonp, xml, csv, html, etc
+* Drag and drop CSV upload for CSV-to-API generation
+* Basic SQL "SELECT" statements can be used for each endpoint. Currently only read-only queries are included
+* You can create custom SQL queries as new endpoints for more complex statements like JOINs across multiple tables.			
+* You get auto-generated interactive documentation as a <a href="http://swagger.wordnik.com/">Swagger compliant API</a>
+* You can auto-generate client libraries (with the Swagger schema and <a href="https://github.com/wordnik/swagger-codegen">Swagger Codegen</a>)
+* You get API access logs
+* You get API key management (soon)
 
-Additional Parameters
+
+
+Standard API Path & Parameters
 ---------------------
 
+There are no required parameters, but a number of optional ones. Each one of your APIs will be automatically documented, but for review the optional parameters include:
+
+### Optional Parameters
+* `column`: the name of a column in your table
+* `value`: a matching value found in the specified column
 * `order_by`: name of column to sort by
 * `direction`: direction to sort, either `asc` or `desc` (default `asc`)
 * `limit`: number, maximum number of results to return
 
-e.g., `/[database]/[table]/[column]/[value].[format]?order_by=[column]&direction=[direction]`
+e.g., `/[database]/[table].[format]?column=[column]&value=[value]&order_by=[column]&direction=[direction]`
 
 Requirements
 ------------
