@@ -233,23 +233,35 @@ class Restdb extends Db_api {
 				$operations['httpMethod'] = 'GET';	
 				$operations['nickname'] = $this->get_table;			
 				$operations['dataType'] = 'string';							
-				$operations['required'] = 'false';
+				$operations['required'] = false;
 
 				// Parameters
 				$p_column = $this->swagger->parameters();				
 				$p_column['paramType'] 		= 'query';
 				$p_column['name'] 			= 'column';				
 				$p_column['description'] 	= 'A field (column name) in the table';								
-				$p_column['required'] 		= 'false';																
-				$p_column['dataType']	 	= 'String';											
-				$p_column['allowMultiple'] 	= 'false';	
+				$p_column['required'] 		= false;																
+				$p_column['dataType']	 	= 'string';											
+				$p_column['allowMultiple'] 	= false;	
 				
 				$p_value = $p_column;
 				$p_value['name'] 			= 'value';				
-				$p_value['description'] 	= 'A value within the specified column';								
+				$p_value['description'] 	= 'A value within the specified column';
+				
+				$p_limit = $p_column;
+				$p_limit['name']			= 'limit';
+				$p_limit['description']		= 'Maximum number of results to return';	
+				$p_limit['dataType']	 	= 'int';	
+				
+				$allowableValues = $this->swagger->allowableValues();
+				$allowableValues['max'] 	= 1000;
+				$allowableValues['min'] 	= 1;														
+				$allowableValues['valueType'] 	= 'RANGE';																		
+				
+				$p_limit['allowableValues'] = $allowableValues;							
 												
 
-				$operations['parameters'] = array($p_column, $p_value);
+				$operations['parameters'] = array($p_column, $p_value, $p_limit);
 
 				unset($operations['notes']);
 				unset($operations['errorResponses']);	
