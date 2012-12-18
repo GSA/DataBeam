@@ -71,12 +71,18 @@ PDO compatible databases include:
 Installation
 -----
 
-1. Copy `config.sample.php` to `config.php` and edit:
-    a. Your settings for <a href="https://github.com/settings/applications/new">GitHub authentication</a> 
-    b. The path to where you want to store your SQLite files
-2. Import the SQL database found in /sql/restdb.sql into your local database, 
-    a. Example: `mysql -u root -p restdb < restdb.sql`
-3. Copy `database.sample.php` to `database.php` and edit with your local database settings
+This is a <a href="http://ellislab.com/codeigniter">CodeIgniter</a> PHP application. Installation primarily consists of editing config files in `/application/config` and importing the database schema. 
+
+1. Grab the code `git clone https://github.com/philipashlock/RESTdb.git`
+2. Copy `/application/config/config.sample.php` to `/application/config/config.php` and edit:
+    a. Your OAuth Client ID and Client Secret for <a href="https://github.com/settings/applications/new">GitHub authentication</a> 
+    b. The path to where you want to store your SQLite files (give this directory adequate permissions for your server to write to)
+3. Copy `/application/config/upload.sample.php` to `/application/config/upload.php` and edit upload_path with the path to where you want to save uploaded CSV files (give this directory adequate permissions for your server to write to)
+4. Create a local database and import the SQL database found in /sql/restdb.sql into this local database. Fore example:
+    a. `mysql> CREATE DATABASE restdb;`
+    b. `$> mysql -u root -p restdb < restdb.sql`
+5. Copy `/application/config/database.sample.php` to `/application/config/database.php` and edit with your local database settings
+6. Copy `/sample.htaccess` to `/.htaccess`. You may need to adjust the configuration of your .htaccess file to match your environment. 
 
 
 License
