@@ -226,51 +226,7 @@ class Restdb extends Db_api {
 				$this->get_table = $db_settings['name_url']; 
 				$this->swagger->resourcePath = '/local';
 				
-				$api['path'] = $this->swagger->resourcePath . '/' . $this->get_table . '.{format}';
-				$api['description'] = '';
-
-				$operations = $this->swagger->operations();			
-				$operations['httpMethod'] = 'GET';	
-				$operations['nickname'] = $this->get_table;			
-				$operations['dataType'] = 'string';							
-				$operations['required'] = false;
-
-				// Parameters
-				$p_column = $this->swagger->parameters();				
-				$p_column['paramType'] 		= 'query';
-				$p_column['name'] 			= 'column';				
-				$p_column['description'] 	= 'A field (column name) in the table';								
-				$p_column['required'] 		= false;																
-				$p_column['dataType']	 	= 'string';											
-				$p_column['allowMultiple'] 	= false;	
-				
-				$p_value = $p_column;
-				$p_value['name'] 			= 'value';				
-				$p_value['description'] 	= 'A value within the specified column';
-				
-				$p_limit = $p_column;
-				$p_limit['name']			= 'limit';
-				$p_limit['description']		= 'Maximum number of results to return';	
-				$p_limit['dataType']	 	= 'int';	
-				
-				$allowableValues = $this->swagger->allowableValues();
-				$allowableValues['max'] 	= 1000;
-				$allowableValues['min'] 	= 1;														
-				$allowableValues['valueType'] 	= 'RANGE';																		
-				
-				$p_limit['allowableValues'] = $allowableValues;							
-												
-
-				$operations['parameters'] = array($p_column, $p_value, $p_limit);
-
-				unset($operations['notes']);
-				unset($operations['errorResponses']);	
-			
-				$api['operations'] = array($operations);
-		
-
-				$this->swagger->apis[] = $api;				
-				
+				$this->swagger->apis[] = $this->swagger_api($this->get_table);
 				
 			} else {
 
@@ -279,24 +235,7 @@ class Restdb extends Db_api {
 
 				foreach($tables as $table) {
 				
-
-					$api['path'] = $this->swagger->resourcePath . '/' . $table . '.{format}';
-					$api['description'] = '';
-
-					$operations = $this->swagger->operations();			
-					$operations['httpMethod'] = 'GET';	
-					$operations['nickname'] = $table;			
-					$operations['responseClass'] = 'string';							
-					$operations['summary'] = '';
-
-					unset($operations['notes']);
-					unset($operations['parameters']);
-					unset($operations['errorResponses']);	
-				
-					$api['operations'] = array($operations);
-			
-
-					$this->swagger->apis[] = $api;
+					$this->swagger->apis[] = $this->swagger_api($table);
 
 				}
 			}
@@ -389,6 +328,55 @@ class Restdb extends Db_api {
 				
 		$this->index_get($user_url, $name_url, $table_name, $local);		
 					
+	}
+	
+	private function swagger_api($table) {
+		
+			$api['path'] = $this->swagger->resourcePath . '/' . $table . '.{format}';
+			$api['description'] = '';
+
+			$operations = $this->swagger->operations();			
+			$operations['httpMethod'] = 'GET';	
+			$operations['nickname'] = $table;			
+			$operations['dataType'] = 'string';							
+			$operations['required'] = false;
+
+			// Parameters
+			$p_column = $this->swagger->parameters();				
+			$p_column['paramType'] 		= 'query';
+			$p_column['name'] 			= 'column';				
+			$p_column['description'] 	= 'A field (column name) in the table';								
+			$p_column['required'] 		= false;																
+			$p_column['dataType']	 	= 'string';											
+			$p_column['allowMultiple'] 	= false;	
+			
+			$p_value = $p_column;
+			$p_value['name'] 			= 'value';				
+			$p_value['description'] 	= 'A value within the specified column';
+			
+			$p_limit = $p_column;
+			$p_limit['name']			= 'limit';
+			$p_limit['description']		= 'Maximum number of results to return';	
+			$p_limit['dataType']	 	= 'int';	
+			
+			$allowableValues = $this->swagger->allowableValues();
+			$allowableValues['max'] 	= 1000;
+			$allowableValues['min'] 	= 1;														
+			$allowableValues['valueType'] 	= 'RANGE';																		
+			
+			$p_limit['allowableValues'] = $allowableValues;							
+											
+
+			$operations['parameters'] = array($p_column, $p_value, $p_limit);
+
+			unset($operations['notes']);
+			unset($operations['errorResponses']);	
+		
+			$api['operations'] = array($operations);
+	
+
+			return $api;		
+		
 	}
 	
 		
