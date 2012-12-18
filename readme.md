@@ -6,12 +6,12 @@ Dynamically generate RESTful APIs from the contents of database tables or CSV fi
 What Problem This Solves
 ------------------------
 
-Creating an API to access information within existing database tables can be time consuming when done on a case by case basis, but often little of the work needed to accomplish this is specific to the needs of the dataset. Furthermore, there is no simple application to stand up new APIs from an existing dataset. There are great robust systems like <a href="http://ckan.org">CKAN</a>, but there are no solutions that are as easy to install and start using in the way an application like Wordpress is.
+Creating an API to access information within existing database tables can be time consuming when done on a case by case basis, but often little of the work needed to accomplish this is specific to the needs of the dataset. Furthermore, there is no simple application to stand up new APIs from an existing dataset. There are great robust systems like <a href="http://ckan.org">CKAN</a> for large data catalogs, but there are no basic solutions that are as easy to install and start using in the way an application like Wordpress is.
 
 How This Solves It
 ------------------
 
-RESTdb acts as a middleware interface allowing users to interact with a database or uploaded CSV file as if it was a fully documented native API. This makes it unnecessary to create custom code for each database layer. As a simple PHP application, it's incredibly easy to install and is designed as a multi-user platform to be shared across an organization, but it's also simple and lightweight enough that it's practical to install for the sole purpose of hosting one dataset. 
+RESTdb acts as a middleware interface allowing users to interact with a database or uploaded CSV file as if it was a fully documented native API. This makes it unnecessary to create custom code for each database layer. As a simple PHP application, it's incredibly easy to install. It's designed as a multi-user platform to be shared across an organization, but it's also simple and lightweight enough that it's practical to install for the sole purpose of hosting one dataset as an API. 
 
 Features
 --------
