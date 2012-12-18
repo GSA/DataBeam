@@ -6,14 +6,12 @@ Dynamically generate RESTful APIs from the contents of database tables or CSV fi
 What Problem This Solves
 ------------------------
 
-Creating an API to access information within existing database tables can be time consuming when done on a case by case basis, but often little of the work needed to accomplish this is specific to the needs of the dataset. 
+Creating an API to access information within existing database tables can be time consuming when done on a case by case basis, but often little of the work needed to accomplish this is specific to the needs of the dataset. Furthermore, there is no simple application to stand up new APIs from an existing dataset. There are great robust systems like <a href="http://ckan.org">CKAN</a>, but there are no solutions that are as easy to install and start using in the way an application like Wordpress is.
 
 How This Solves It
 ------------------
 
-RESTdb acts as an interface allowing users to interact with that database as if it was a native API. The column names function as the key names. This obviates the need for custom code for each database layer.
-
-When Alternative PHP Cache (APC) is installed, parsed data is stored within APC, which substantially accelerates its functionality.
+RESTdb acts as a middleware interface allowing users to interact with a database or uploaded CSV file as if it was a fully documented native API. This makes it unnecessary to create custom code for each database layer. As a simple PHP application, it's incredibly easy to install and is designed as a multi-user platform to be shared across an organization, but it's also simple and lightweight enough that it's practical to install for the sole purpose of hosting one dataset. 
 
 Features
 --------
@@ -25,7 +23,7 @@ Features
 * You can auto-generate client libraries (with the Swagger schema and <a href="https://github.com/wordnik/swagger-codegen">Swagger Codegen</a>)
 * You get API access logs
 * You get API key management (soon)
-
+* Multi-user with oAuth for user authentication. Currently Github is used for all user accounts.
 
 
 Standard API Path & Parameters
@@ -73,8 +71,11 @@ PDO compatible databases include:
 Installation
 -----
 
-1. Copy `config.sample.php` to `config.php` and edit with your settings for github authentication and the path to where you want to store your SQLite files
-2. Import the SQL database found in /sql/restdb.sql into your local database
+1. Copy `config.sample.php` to `config.php` and edit:
+    a. Your settings for <a href="https://github.com/settings/applications/new">GitHub authentication</a> 
+    b. The path to where you want to store your SQLite files
+2. Import the SQL database found in /sql/restdb.sql into your local database, 
+    a. Example: `mysql -u root -p restdb < restdb.sql`
 3. Copy `database.sample.php` to `database.php` and edit with your local database settings
 
 

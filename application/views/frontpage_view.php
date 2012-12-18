@@ -16,6 +16,7 @@
 			<li>You can auto-generate client libraries (with the Swagger schema and <a href="https://github.com/wordnik/swagger-codegen">Swagger Codegen</a>)</li>			
 			<li>You get API access logs</li>
 			<li>You get API key management (soon)</li>
+			<li>oAuth for user management, currently only Github is used</li>			
 	    </ul>
 
 		<h4 style="margin-top : 2em">Requirements</h4>
