@@ -226,6 +226,7 @@ class Restdb extends Db_api {
 				$this->get_table = $db_settings['name_url']; 
 				$this->swagger->resourcePath = '/local';
 				
+				$this->register_db( $this->db_id, $get_db['config'] );						
 				$this->swagger->apis[] = $this->swagger_api($this->get_table);
 				
 			} else {
@@ -352,10 +353,15 @@ class Restdb extends Db_api {
 			$p_column['allowMultiple'] 	= false;	
 			
 			$allowableValues 				= $this->swagger->allowableValues();
+			unset($allowableValues['min']);
+			unset($allowableValues['max']);
+						
 			$allowableValues['valueType'] 	= 'LIST';	
 			$allowableValues['values']		= $this->get_columns($table, $this->db_id);															
 			
-			$p_column['allowableValues']	= $allowableValues;
+			if ($allowableValues['values']) {
+				$p_column['allowableValues']	= $allowableValues;
+			}
 			
 			$p_value = $p_column;
 			unset($p_value['allowableValues']);
