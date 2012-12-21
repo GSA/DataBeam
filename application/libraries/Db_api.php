@@ -271,7 +271,7 @@ abstract class Db_api extends REST_Controller
 	protected function verify_table( $query_table, $db = null ) {
 		
 		$tables = $this->cache_get( $this->get_db( $db )->name . '_tables' );
-		
+
 		if ( !$tables  ) {
 		
 			$tables = $this->allowed_tables($db);
@@ -332,9 +332,9 @@ abstract class Db_api extends REST_Controller
 	 * @param string $db the database to check
 	 * @return array an array of the column names
 	 */
-	protected function get_columns( $table, $db = null ) {
+	public function get_columns( $table, $db = null ) {
 
-		if ( !$this->verify_table( $table ) ) {
+		if ( !$this->verify_table( $table, $db ) ) {
 			return false;
 		}
 			

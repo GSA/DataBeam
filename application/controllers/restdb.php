@@ -234,7 +234,7 @@ class Restdb extends Db_api {
 				$tables = $this->allowed_tables($this->db_id);
 
 				foreach($tables as $table) {
-				
+							
 					$this->swagger->apis[] = $this->swagger_api($table);
 
 				}
@@ -341,6 +341,7 @@ class Restdb extends Db_api {
 			$operations['dataType'] = 'string';							
 			$operations['required'] = false;
 
+					
 			// Parameters
 			$p_column = $this->swagger->parameters();				
 			$p_column['paramType'] 		= 'query';
@@ -350,7 +351,15 @@ class Restdb extends Db_api {
 			$p_column['dataType']	 	= 'string';											
 			$p_column['allowMultiple'] 	= false;	
 			
+			$allowableValues 				= $this->swagger->allowableValues();
+			$allowableValues['valueType'] 	= 'LIST';	
+			$allowableValues['values']		= $this->get_columns($table, $this->db_id);															
+			
+			$p_column['allowableValues']	= $allowableValues;
+			
 			$p_value = $p_column;
+			unset($p_value['allowableValues']);
+			
 			$p_value['name'] 			= 'value';				
 			$p_value['description'] 	= 'A value within the specified column';
 			
