@@ -2,9 +2,9 @@
 
 <?php include 'header_inc_view.php';?>
 
-<h1>Welcome to RestDB</h1>
+<h1>Welcome to DataBeam</h1>
 		
-		<h2>RestDB allows you to automatically turn any CSV or database into an API</h2>
+		<h2>DataBeam allows you to automatically turn any CSV or database into an API</h2>
 
 		<h4 style="margin-top : 4em">Features</h4>
 	    <ul>
@@ -59,7 +59,7 @@
 		</ul>
 		
 		<h4 style="margin-top : 2em">Further Reading</h4>
-		<p> For more advanced direct data interaction you might also be interested in <a href="http://reclinejs.com">Recline.js</a>. Since it's a front-end layer Recline.js could also be included as part of the RestDB UI.</p>		
+		<p> For more advanced direct data interaction you might also be interested in <a href="http://reclinejs.com">Recline.js</a>. Since it's a front-end layer Recline.js could also be included as part of the DataBeam UI.</p>		
 
 
 		<?php include 'footer_inc_view.php';?>
