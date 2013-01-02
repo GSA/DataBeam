@@ -228,7 +228,7 @@ class Restdb extends Db_api {
 
 			if ($db_settings['local']) {
 				
-				$this->get_table = $db_settings['name_url']; 
+				$this->get_table = $db_settings['db_name']; 
 				$this->swagger->resourcePath = '/local';
 				
 				$this->register_db( $this->db_id, $get_db['config'] );						
@@ -365,6 +365,8 @@ class Restdb extends Db_api {
 						
 			$allowableValues['valueType'] 	= 'LIST';	
 			$allowableValues['values']		= $this->get_columns($table, $this->db_id);															
+			
+
 			
 			if ($allowableValues['values']) {
 				$p_column['allowableValues']	= $allowableValues;
