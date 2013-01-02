@@ -130,6 +130,7 @@ abstract class Db_api extends REST_Controller
 			'column' => null,
 			'value' => null,
 			'limit' => null,
+			'page' => null,
 			'format' => 'json',
 			'callback' =>  null,
 			'query' =>  null
@@ -467,6 +468,11 @@ abstract class Db_api extends REST_Controller
 				if ( $query['limit'] ) {
 					$sql .= " LIMIT " . (int) $query['limit'];
 				}
+				
+				if ( $query['page'] && $query['limit'] ) {
+					$offset = $query['limit'] * ($query['page'] - 1);
+					$sql .= " OFFSET " . (int) $offset;
+				}				
 				
 				
 				$sth = $dbh->prepare( $sql );

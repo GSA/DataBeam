@@ -24,7 +24,12 @@ class Restdb extends Db_api {
 		$this->get_table 	= (empty($table)) ? $this->input->get('table', TRUE) : $table;		
 		$this->get_user 	= (empty($user))  ? $this->input->get('user', TRUE)	 : $user;		
 		$this->get_local	= (empty($local)) ? $this->input->get('local', TRUE) : $local;		
-		$this->get_format 	= $this->_detect_output_format(); 	
+		$this->get_format 	= $this->_detect_output_format(); 
+		
+		$this->get_limit  	= (empty($limit)) ? $this->input->get('limit', TRUE) : $limit;			
+		$this->get_limit 	= (empty($this->get_limit) && $this->config->item('default_page_size')) ? $this->config->item('default_page_size') :  $this->get_limit;
+		$this->get_page  	= (empty($page)) ? $this->input->get('page', TRUE) : $page;			
+		
 		
 		// This separates what's set with the URI vs the settings pulled from the database with prepare_db which distinguishes if we're showing docs or the actual api
 		$showdocs = ($this->get_local == 'true') ? false : null;
@@ -38,7 +43,7 @@ class Restdb extends Db_api {
 		$this->register_db( $this->db_id, $get_db['config'] );		
 		//$this->register_custom_sql( 'democracymap', config_item('sql_args') );		
 		
-		$query = array('db' => $this->db_id, 'table' => $this->get_table);		
+		$query = array('db' => $this->db_id, 'table' => $this->get_table, 'limit' => $this->get_limit, 'page' => $this->get_page);		
 		
 		$query = $this->parse_query($query);
 		$this->set_db( $query['db'] );
@@ -373,7 +378,7 @@ class Restdb extends Db_api {
 			$p_limit['name']			= 'limit';
 			$p_limit['description']		= 'Maximum number of results to return';	
 			$p_limit['dataType']	 	= 'int';	
-			
+						
 			$allowableValues = $this->swagger->allowableValues();
 			$allowableValues['max'] 	= 1000;
 			$allowableValues['min'] 	= 1;														
@@ -381,8 +386,13 @@ class Restdb extends Db_api {
 			
 			$p_limit['allowableValues'] = $allowableValues;							
 											
+			$p_page = $p_limit;
+			$p_page['name']			= 'page';
+			$p_page['description']	= 'The offset for pagination. Page size is defined by "limit"';	
+			$p_page['dataType']	 	= 'int';
+			unset($p_page['allowableValues']);
 
-			$operations['parameters'] = array($p_column, $p_value, $p_limit);
+			$operations['parameters'] = array($p_column, $p_value, $p_limit, $p_page);
 
 			unset($operations['notes']);
 			unset($operations['errorResponses']);	

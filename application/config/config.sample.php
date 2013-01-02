@@ -2,7 +2,7 @@
 
 
 // Where to store your SQLite database files
-$config['sqlite_data_path'] 	= '/path/to/db/'; // eg /var/www/restdb/uploads/db/
+$config['sqlite_data_path'] 	= '/path/to/db/'; // eg /var/www/databeam/uploads/db/
 
 // OAuth Settings
 $config['github_oauth_id'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
@@ -10,6 +10,8 @@ $config['github_oauth_secret'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 
 // You shouldn't need to edit this unless you're not hosting this a the root of your server
 $config['github_oauth_redirect'] =  'http://' . $_SERVER['SERVER_NAME'] . '/auth/session/github';
+
+$config['default_page_size'] = 50; // this defines the default for the 'limit' parameter in queries
 
 
 /*
