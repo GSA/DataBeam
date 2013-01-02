@@ -228,11 +228,11 @@ class Restdb extends Db_api {
 
 			if ($db_settings['local']) {
 				
-				$this->get_table = $db_settings['db_name']; 
+				$this->get_table = $db_settings['name_url']; 
 				$this->swagger->resourcePath = '/local';
 				
 				$this->register_db( $this->db_id, $get_db['config'] );						
-				$this->swagger->apis[] = $this->swagger_api($this->get_table);
+				$this->swagger->apis[] = $this->swagger_api($db_settings['db_name'], $this->get_table);
 				
 			} else {
 
@@ -241,7 +241,7 @@ class Restdb extends Db_api {
 
 				foreach($tables as $table) {
 							
-					$this->swagger->apis[] = $this->swagger_api($table);
+					$this->swagger->apis[] = $this->swagger_api($table, $table);
 
 				}
 			}
@@ -336,14 +336,14 @@ class Restdb extends Db_api {
 					
 	}
 	
-	private function swagger_api($table) {
+	private function swagger_api($table_name, $table_url) {
 		
-			$api['path'] = $this->swagger->resourcePath . '/' . $table . '.{format}';
+			$api['path'] = $this->swagger->resourcePath . '/' . $table_url . '.{format}';
 			$api['description'] = '';
 
 			$operations = $this->swagger->operations();			
 			$operations['httpMethod'] = 'GET';	
-			$operations['nickname'] = $table;			
+			$operations['nickname'] = $table_url;			
 			$operations['dataType'] = 'string';							
 			$operations['required'] = false;
 
@@ -364,7 +364,7 @@ class Restdb extends Db_api {
 			unset($allowableValues['max']);
 						
 			$allowableValues['valueType'] 	= 'LIST';	
-			$allowableValues['values']		= $this->get_columns($table, $this->db_id);															
+			$allowableValues['values']		= $this->get_columns($table_name, $this->db_id);															
 			
 
 			
