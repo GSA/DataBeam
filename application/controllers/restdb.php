@@ -348,7 +348,9 @@ class Restdb extends Db_api {
 			$operations['required'] = false;
 
 					
-			// Parameters
+			// ###### Parameters ######
+			
+			// Column
 			$p_column = $this->swagger->parameters();				
 			$p_column['paramType'] 		= 'query';
 			$p_column['name'] 			= 'column';				
@@ -368,12 +370,36 @@ class Restdb extends Db_api {
 				$p_column['allowableValues']	= $allowableValues;
 			}
 			
+			
+			// Value
 			$p_value = $p_column;
 			unset($p_value['allowableValues']);
 			
 			$p_value['name'] 			= 'value';				
 			$p_value['description'] 	= 'A value within the specified column';
 			
+			
+			// Order
+			$p_order = $p_column;
+			$p_order['name'] 			= 'order_by';				
+			$p_order['description'] 	= 'Name of column to sort by';								
+			$p_order['required'] 		= false;																
+			$p_order['dataType']	 	= 'string';											
+			$p_order['allowMultiple'] 	= false;			
+			
+			// Direction
+			$p_direction = $p_value;
+			
+			$p_direction['name'] 			= 'direction';				
+			$p_direction['description'] 	= 'Direction to sort results';			
+			
+			$allowableValues 				= $this->swagger->allowableValues();
+			$allowableValues['valueType'] 	= 'LIST';	
+			$allowableValues['values']		= array('ASC', 'DESC');			
+
+			$p_direction['allowableValues'] 	= $allowableValues;
+			
+			// Limit
 			$p_limit = $p_column;
 			$p_limit['name']			= 'limit';
 			$p_limit['description']		= 'Maximum number of results to return';	
@@ -385,14 +411,15 @@ class Restdb extends Db_api {
 			$allowableValues['valueType'] 	= 'RANGE';																		
 			
 			$p_limit['allowableValues'] = $allowableValues;							
-											
+				
+			// Page								
 			$p_page = $p_limit;
 			$p_page['name']			= 'page';
 			$p_page['description']	= 'The offset for pagination. Page size is defined by "limit"';	
 			$p_page['dataType']	 	= 'int';
 			unset($p_page['allowableValues']);
 
-			$operations['parameters'] = array($p_column, $p_value, $p_limit, $p_page);
+			$operations['parameters'] = array($p_column, $p_value, $p_order, $p_direction, $p_limit, $p_page);
 
 			unset($operations['notes']);
 			unset($operations['errorResponses']);	
