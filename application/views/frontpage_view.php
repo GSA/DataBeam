@@ -41,6 +41,9 @@
         </ul>		
 		
 		<h4 style="margin-top : 2em">To Do</h4>
+		<p>
+			I'm starting to migrate issues to the <a href="https://github.com/philipashlock/DataBeam/issues">Github Repo Issue tracker</a>
+		</p>
 	    <ul>
 			<li>Provide developer documentation for installation and contributions. Provide better user documentation and feature listing</li>	
 		    <li>Implement better caching - it's barely implemented at all right now</li>	
@@ -55,11 +58,14 @@
 
 		<h4 style="margin-top : 2em">Who &amp; Where</h4>
 		<ul>
-			<li><a href="https://github.com/philipashlock/RESTdb">Source Code</a> being hacked on by <a href="http://twitter.com/philipashlock">Philip Ashlock</a></li>		
+			<li><a href="https://github.com/philipashlock/DataBeam">Source Code</a> being hacked on by <a href="http://twitter.com/philipashlock">Philip Ashlock</a></li>		
 		</ul>
 		
 		<h4 style="margin-top : 2em">Further Reading</h4>
-		<p> For more advanced direct data interaction you might also be interested in <a href="http://reclinejs.com">Recline.js</a>. Since it's a front-end layer Recline.js could also be included as part of the DataBeam UI.</p>		
+		<ul>
+		<li> For more advanced direct data interaction you might also be interested in <a href="http://reclinejs.com">Recline.js</a>. Since it's a front-end layer Recline.js could also be included as part of the DataBeam UI.</li>
+		<li> To automatically create web APIs for geospatial data you might be interested in <a href="http://geoserver.org/display/GEOS/Welcome">GeoServer</a> or <a href="https://github.com/CartoDB/cartodb20">CartoDB</a>
+		</ul>		
 
 
 		<?php include 'footer_inc_view.php';?>

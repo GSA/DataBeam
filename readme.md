@@ -76,7 +76,7 @@ Installation
 
 This is a <a href="http://ellislab.com/codeigniter">CodeIgniter</a> PHP application. Installation primarily consists of editing config files in `/application/config` and importing the database schema. 
 
-1. Grab the code `git clone https://github.com/philipashlock/RESTdb.git`
+1. Grab the code `git clone https://github.com/philipashlock/DataBeam.git`
 2. Copy `/application/config/config.sample.php` to `/application/config/config.php` and edit:
     a. Your OAuth Client ID and Client Secret for <a href="https://github.com/settings/applications/new">GitHub authentication</a> 
     b. The path to where you want to store your SQLite files (give this directory adequate permissions for your server to write to)

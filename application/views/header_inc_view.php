@@ -17,8 +17,8 @@
 			
 			<?php $page_title = (!empty($page['title'])) ? $page['title'] : null?>
 			
-            <li<?php if($page_title == 'Download') echo ' class="active"'?>><a href="https://github.com/philipashlock/RESTdb/archive/master.zip">Download</a></li>
-            <li<?php if($page_title == 'Developers') echo ' class="active"'?>><a href="https://github.com/philipashlock/RESTdb/">Developers</a></li>
+            <li<?php if($page_title == 'Download') echo ' class="active"'?>><a href="https://github.com/philipashlock/DataBeam/archive/master.zip">Download</a></li>
+            <li<?php if($page_title == 'Developers') echo ' class="active"'?>><a href="https://github.com/philipashlock/DataBeam/">Developers</a></li>
             <li<?php if($page_title == 'About') echo ' class="active"'?>><a href="/">About</a></li>
           </ul>
 
