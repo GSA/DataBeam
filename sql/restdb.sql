@@ -172,7 +172,7 @@ CREATE TABLE `users_auth` (
   `user_id` int(8) NOT NULL,
   `username` varchar(255) NOT NULL,
   `username_url` varchar(255) NOT NULL,
-  `name_full` varchar(255) NOT NULL,
+  `name_full` varchar(255),
   `provider_url` text NOT NULL,
   `provider_user_id` int(12) NOT NULL,
   `token` text NOT NULL,

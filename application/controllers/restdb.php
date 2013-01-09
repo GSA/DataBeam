@@ -139,7 +139,10 @@ class Restdb extends Db_api {
 								
 		if ($query->num_rows() > 0) {
 			$data['user'] = $query->first_row('array');
-			$data['user']['name_full'] = properize($data['user']['name_full']);
+			
+			$full_name = (!empty($data['user']['name_full'])) ? $data['user']['name_full'] : $data['user']['username'];
+			
+			$data['user']['name_full'] = properize($full_name);
 		}			
 		
 		// Then check for database entries for that user			
