@@ -43,7 +43,7 @@
 				    <a class="btn btn-small btn-inverse dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
 				    <ul class="dropdown-menu">
 					    <li><a href="/dashboard"><i class="icon-pencil"></i> Edit Profile</a></li>
-					    <li><a href="/logout"><i class="icon-remove"></i> Logout</a></li>
+					    <li><a href="/databeam/logout"><i class="icon-remove"></i> Logout</a></li>
 				    </ul>
 				</div>
 	    	
@@ -51,7 +51,7 @@
 				<?php } 
 				else { ?>
 
-					<a class="btn-auth btn-github" href="/login">Sign in with <b>GitHub</b></a>
+					<a class="btn-auth btn-github" href="/databeam/login">Sign in with <b>GitHub</b></a>
 
 				<?php } ?>
 		

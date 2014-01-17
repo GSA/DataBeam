@@ -3,20 +3,20 @@
 <!--
 /*
  * jQuery File Upload Plugin Demo 6.11
- * https://github.com/blueimp/jQuery-File-Upload
+ * //github.com/blueimp/jQuery-File-Upload
  *
  * Copyright 2010, Sebastian Tschan
- * https://blueimp.net
+ * //blueimp.net
  *
  * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * //www.opensource.org/licenses/MIT
  */
 -->
 
 <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
-<link rel="stylesheet" href="/assets/css/jquery.fileupload-ui.css">
+<link rel="stylesheet" href="./assets/css/jquery.fileupload-ui.css">
 <!-- CSS adjustments for browsers with JavaScript disabled -->
-<noscript><link rel="stylesheet" href="/assets/css/jquery.fileupload-ui-noscript.css"></noscript>
+<noscript><link rel="stylesheet" href="./assets/css/jquery.fileupload-ui-noscript.css"></noscript>
 
 <?php 
 
@@ -142,24 +142,24 @@ include 'header_inc_view.php';?>
 {% } %}
 </script>
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
-<script src="/assets/js/vendor/jquery.ui.widget.js"></script>
+<script src="./assets/js/vendor/jquery.ui.widget.js"></script>
 <!-- The Templates plugin is included to render the upload/download listings -->
-<script src="http://blueimp.github.com/JavaScript-Templates/tmpl.min.js"></script>
+<script src="//blueimp.github.com/JavaScript-Templates/tmpl.min.js"></script>
 <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-<script src="http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js"></script>
+<script src="//blueimp.github.com/JavaScript-Load-Image/load-image.min.js"></script>
 <!-- The Canvas to Blob plugin is included for image resizing functionality -->
-<script src="http://blueimp.github.com/JavaScript-Canvas-to-Blob/canvas-to-blob.min.js"></script>
+<script src="//blueimp.github.com/JavaScript-Canvas-to-Blob/canvas-to-blob.min.js"></script>
 
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-<script src="/assets/js/jquery.iframe-transport.js"></script>
+<script src="./assets/js/jquery.iframe-transport.js"></script>
 <!-- The basic File Upload plugin -->
-<script src="/assets/js/jquery.fileupload.js"></script>
+<script src="./assets/js/jquery.fileupload.js"></script>
 <!-- The File Upload file processing plugin -->
-<script src="/assets/js/jquery.fileupload-fp.js"></script>
+<script src="./assets/js/jquery.fileupload-fp.js"></script>
 <!-- The File Upload user interface plugin -->
-<script src="/assets/js/jquery.fileupload-ui.js"></script>
+<script src="./assets/js/jquery.fileupload-ui.js"></script>
 <!-- The main application script -->
-<script src="/assets/js/main.js"></script>
+<script src="./assets/js/main.js"></script>
 <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE8+ -->
 <!--[if gte IE 8]><script src="js/cors/jquery.xdr-transport.js"></script><![endif]-->
 
