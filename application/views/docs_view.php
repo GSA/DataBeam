@@ -12,8 +12,8 @@
 <script src='<?php echo base_url();?>assets/js/underscore-min.js' type='text/javascript'></script>
 <script src='<?php echo base_url();?>assets/js/backbone-min.js' type='text/javascript'></script>
 <script src='<?php echo base_url();?>assets/js/swagger.js' type='text/javascript'></script>
-<script src='<?php echo base_url();?>assets/js//swagger-ui.js' type='text/javascript'></script>
-<script src='/lib/highlight.7.3.pack.js' type='text/javascript'></script>
+<script src='<?php echo base_url();?>assets/js/swagger-ui.js' type='text/javascript'></script>
+<script src='<?php echo base_url();?>assets/js/highlight.7.3.pack.js' type='text/javascript'></script>
 
 
 <style type="text/css">
@@ -43,7 +43,7 @@
 
 
 <?php
-$discovery_url = '/' . $db['user_url'] . '/api-docs.json/' . $db['name_url'];
+$discovery_url = 'http://'.$_SERVER["SERVER_NAME"].base_url() . $db['user_url'] . '/api-docs.json/' . $db['name_url'];
 ?>
 
    <script type="text/javascript">

@@ -19,7 +19,7 @@ $(function () {
     $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
-        url: '/upload/upload_file'
+        url: '/databeam/upload/upload_file'
     });
 
     // Enable iframe cross-domain access via redirect option:
@@ -28,14 +28,14 @@ $(function () {
         'redirect',
         window.location.href.replace(
             /\/[^\/]*$/,
-            '/cors/result.html?%s'
+            '/databeam/cors/result.html?%s'
         )
     );
 
     if (window.location.hostname === 'restdb.dev') {
         // Demo settings:
         $('#fileupload').fileupload('option', {
-            url: '/upload/upload_file',
+            url: '/databeam/upload/upload_file',
             maxFileSize: 5000000,
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png|csv)$/i,
             process: [
@@ -57,7 +57,7 @@ $(function () {
         // Upload server status check for browsers with CORS support:
         if ($.support.cors) {
             $.ajax({
-                url: '/upload/upload_file',
+                url: '/databeam/upload/upload_file',
                 type: 'HEAD'
             }).fail(function () {
                 $('<span class="alert alert-error"/>')
