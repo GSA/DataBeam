@@ -315,12 +315,10 @@ class Restdb extends Db_api {
 						'column_blacklist'  => 	$this->input->post('column_blacklist', TRUE),
 					);
 		
-		$this->db->insert('db_connections', $data);		
-		
-		
-		redirect('/dashboard');
-		
-	}	
+		$this->db->insert('db_connections', $data);
+
+        header('Location: '.base_url('dashboard'));die();
+	}
 	
 
 	public function router_get($user_url = null, $name_url = null, $table_name = null) {								

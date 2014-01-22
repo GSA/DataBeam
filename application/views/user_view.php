@@ -34,8 +34,8 @@ include 'header_inc_view.php';
 			} else {
 				$icon = 'icon-hdd';
 			}
-			
-				echo "<tr><td><i class=\"$icon\"></i> <a href=\"/$user_url/$db_url\">$db_name</a> </td></tr>";
+                
+				echo '<tr><td><i class="'.$icon.'"></i> <a href="'.base_url("$user_url/$db_url").'">'.$db_name.'</a> </td></tr>';
 			}
 			
 			echo '</table>';
