@@ -84,10 +84,8 @@ This is a <a href="http://ellislab.com/codeigniter">CodeIgniter</a> PHP applicat
   * The path to where you want to store your SQLite files (give this directory adequate permissions for your server to write to)
 1. Open `/application/config/<env>/upload.php` and edit upload_path with the path to where you want to save uploaded CSV files (give this directory adequate permissions for your server to write to)
 1. Create a local database and import the SQL database found in /sql/restdb.sql into this local database. Two examples how to do it:
-    
   * `mysql> CREATE DATABASE restdb;`
   * `$> mysql -u root -p restdb < restdb.sql`
-
 1. Open `/application/config/<env>/database.php` and edit with your local database settings
 
 
