@@ -18,7 +18,10 @@
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-	define('ENVIRONMENT', 'development');
+
+$env = getenv('ENV');
+define('ENVIRONMENT', (FALSE !== $env ? $env : 'production'));
+
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
@@ -32,12 +35,14 @@ if (defined('ENVIRONMENT'))
 {
 	switch (ENVIRONMENT)
 	{
+		case 'local':
 		case 'development':
 			error_reporting(E_ALL);
-			ini_set('display_errors','Off');  // <——- added
+			ini_set('display_errors','On');  // <——- added
 		break;
 	
 		case 'testing':
+		case 'staging':
 		case 'production':
 			error_reporting(0);
 		break;

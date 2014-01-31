@@ -8,8 +8,4 @@
 
 $config['upload_path'] = '/your/file/path/'; // absolute path
 $config['allowed_types'] = 'csv'; //'gif|jpg|png|csv|txt|JPG|GIF|PNG|CSV|TXT';
-$config['max_size'] = '1000';
-
-
-
-
+$config['max_size'] = '2000'; // kb

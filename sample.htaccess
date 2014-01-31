@@ -1,4 +1,12 @@
+SetEnv ENV production
+
+Options FollowSymLinks -Indexes
+
 RewriteEngine On
+
+#RewriteBase /databeam/
+
+RedirectMatch 404 "(?:.*)/(?:\.git|file_or_dir)(?:/.*)?$"
 
 RewriteCond $1 !^(index\.php|assets|img|css|js|video_files|robots\.txt|favicon\.ico)
 

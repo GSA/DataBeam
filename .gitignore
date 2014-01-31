@@ -1,4 +1,5 @@
 .DS_Store
+.idea
 
 application/config/dbapi.php
 
@@ -15,3 +16,8 @@ uploads/*.csv
 uploads/db/*.db
 
 application/config/upload.php
+
+application/config/development
+application/config/local
+application/config/production
+application/config/staging
