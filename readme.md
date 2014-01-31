@@ -76,16 +76,19 @@ Installation
 
 This is a <a href="http://ellislab.com/codeigniter">CodeIgniter</a> PHP application. Installation primarily consists of editing config files in `/application/config` and importing the database schema. 
 
-1. Grab the code `git clone https://github.com/philipashlock/DataBeam.git`
-2. Copy `/application/config/config.sample.php` to `/application/config/config.php` and edit:
-    a. Your OAuth Client ID and Client Secret for <a href="https://github.com/settings/applications/new">GitHub authentication</a> 
-    b. The path to where you want to store your SQLite files (give this directory adequate permissions for your server to write to)
-3. Copy `/application/config/upload.sample.php` to `/application/config/upload.php` and edit upload_path with the path to where you want to save uploaded CSV files (give this directory adequate permissions for your server to write to)
-4. Create a local database and import the SQL database found in /sql/restdb.sql into this local database. Fore example:
-    a. `mysql> CREATE DATABASE restdb;`
-    b. `$> mysql -u root -p restdb < restdb.sql`
-5. Copy `/application/config/database.sample.php` to `/application/config/database.php` and edit with your local database settings
-6. Copy `/sample.htaccess` to `/.htaccess`. You may need to adjust the configuration of your .htaccess file to match your environment. 
+1. Grab the code `git clone https://github.com/GSA/DataBeam.git`
+1. Copy `/sample.htaccess` to `/.htaccess`. You may need to adjust the configuration of your .htaccess file to match your environment.
+1. Copy `/application/config/sample-env` dir to `/application/config/<env>`, according to your environment.
+   Edit `/application/config/<env>/config.php`:
+  * Your OAuth Client ID and Client Secret for <a href="https://github.com/settings/applications/new">GitHub authentication</a> 
+  * The path to where you want to store your SQLite files (give this directory adequate permissions for your server to write to)
+1. Open `/application/config/<env>/upload.php` and edit upload_path with the path to where you want to save uploaded CSV files (give this directory adequate permissions for your server to write to)
+1. Create a local database and import the SQL database found in /sql/restdb.sql into this local database. Two examples how to do it:
+    
+  * `mysql> CREATE DATABASE restdb;`
+  * `$> mysql -u root -p restdb < restdb.sql`
+
+1. Open `/application/config/<env>/database.php` and edit with your local database settings
 
 
 License
