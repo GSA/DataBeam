@@ -7,7 +7,7 @@
 	
 		<p>You've been logged out.</p>
 
-		<p>You can also <a href="/auth/session/github">Login</a> again</p>
+		<p>You can also <a href="<?php echo base_url();?>auth/session/github">Login</a> again</p>
 
 
 <?php include 'footer_inc_view.php';?>

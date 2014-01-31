@@ -184,8 +184,7 @@ class Restdb extends Db_api {
 		$this->swagger->swaggerVersion = "1.1";
 		$this->swagger->apiVersion = "0.1";
 
-		
-		$basePath = (strpos(current_url(), '/api-docs')) ? substr(current_url(), 0, strpos(current_url(), '/api-docs')) : current_url();		
+		$basePath = (strpos(current_url(), '/api-docs')) ? substr(current_url(), 0, strpos(current_url(), '/api-docs')) : current_url();
 		
 		if(empty($this->db_id)) {
 			
@@ -193,7 +192,7 @@ class Restdb extends Db_api {
 			$resources = $user['connections'];
 			
 
-			$this->swagger->basePath = $basePath; //substr($basePath, 0, strrpos($basePath, '/'));			
+			$this->swagger->basePath = 'http://'.$_SERVER['SEVER_NAME'].$basePath; //substr($basePath, 0, strrpos($basePath, '/'));
 			unset($this->swagger->resourcePath);
 			
 			$this->swagger->apis = array();
@@ -219,7 +218,7 @@ class Restdb extends Db_api {
 
 
 			$basePath = (strpos(current_url(), '/api-docs')) ? substr(current_url(), 0, strpos(current_url(), '/api-docs')) : current_url();
-			$this->swagger->basePath = $basePath; //substr($basePath, 0, strrpos($basePath, '/'));	
+			$this->swagger->basePath = 'http://'.$_SERVER['SERVER_NAME'].$basePath; //substr($basePath, 0, strrpos($basePath, '/'));
 			$this->swagger->resourcePath = substr(current_url(), strrpos(current_url(), '/'));			
 
 			$get_db = $this->prepare_db();
@@ -316,12 +315,10 @@ class Restdb extends Db_api {
 						'column_blacklist'  => 	$this->input->post('column_blacklist', TRUE),
 					);
 		
-		$this->db->insert('db_connections', $data);		
-		
-		
-		redirect('/dashboard');
-		
-	}	
+		$this->db->insert('db_connections', $data);
+
+        header('Location: '.base_url('dashboard'));die();
+	}
 	
 
 	public function router_get($user_url = null, $name_url = null, $table_name = null) {								

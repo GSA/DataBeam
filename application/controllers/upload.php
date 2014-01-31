@@ -93,7 +93,7 @@ class Upload extends CI_Controller {
 			$info->name_url = slugify($info->name);
 			
 
-			$info->api = '/' . $info->username_url . '/' . $info->name_url;
+			$info->api = base_url().$info->username_url . '/' . $info->name_url;
 			
             $info->size = $data['file_size'];
             $info->type = $data['file_type'];

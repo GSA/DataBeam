@@ -1,19 +1,19 @@
 <?php include 'header_meta_inc_view.php';?>
 
 
-<link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'/>
-<link href='/assets/css/hightlight.default.css' media='screen' rel='stylesheet' type='text/css'/>
-<link href='/assets/css/screen.css' media='screen' rel='stylesheet' type='text/css'/>
-<script src='/assets/js/jquery-1.8.0.min.js' type='text/javascript'></script>
-<script src='/assets/js/jquery.slideto.min.js' type='text/javascript'></script>
-<script src='/assets/js/jquery.wiggle.min.js' type='text/javascript'></script>
-<script src='/assets/js/jquery.ba-bbq.min.js' type='text/javascript'></script>
-<script src='/assets/js/handlebars-1.0.rc.1.js' type='text/javascript'></script>
-<script src='/assets/js/underscore-min.js' type='text/javascript'></script>
-<script src='/assets/js/backbone-min.js' type='text/javascript'></script>
-<script src='/assets/js/swagger.js' type='text/javascript'></script>
-<script src='/assets/js//swagger-ui.js' type='text/javascript'></script>
-<script src='/lib/highlight.7.3.pack.js' type='text/javascript'></script>
+<link href='//fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'/>
+<link href='<?php echo base_url();?>assets/css/hightlight.default.css' media='screen' rel='stylesheet' type='text/css'/>
+<link href='<?php echo base_url();?>assets/css/screen.css' media='screen' rel='stylesheet' type='text/css'/>
+<script src='<?php echo base_url();?>assets/js/jquery-1.8.0.min.js' type='text/javascript'></script>
+<script src='<?php echo base_url();?>assets/js/jquery.slideto.min.js' type='text/javascript'></script>
+<script src='<?php echo base_url();?>assets/js/jquery.wiggle.min.js' type='text/javascript'></script>
+<script src='<?php echo base_url();?>assets/js/jquery.ba-bbq.min.js' type='text/javascript'></script>
+<script src='<?php echo base_url();?>assets/js/handlebars-1.0.rc.1.js' type='text/javascript'></script>
+<script src='<?php echo base_url();?>assets/js/underscore-min.js' type='text/javascript'></script>
+<script src='<?php echo base_url();?>assets/js/backbone-min.js' type='text/javascript'></script>
+<script src='<?php echo base_url();?>assets/js/swagger.js' type='text/javascript'></script>
+<script src='<?php echo base_url();?>assets/js/swagger-ui.js' type='text/javascript'></script>
+<script src='<?php echo base_url();?>assets/js/highlight.7.3.pack.js' type='text/javascript'></script>
 
 
 <style type="text/css">
@@ -43,7 +43,7 @@
 
 
 <?php
-$discovery_url = '/' . $db['user_url'] . '/api-docs.json/' . $db['name_url'];
+$discovery_url = 'http://'.$_SERVER["SERVER_NAME"].base_url() . $db['user_url'] . '/api-docs.json/' . $db['name_url'];
 ?>
 
    <script type="text/javascript">
