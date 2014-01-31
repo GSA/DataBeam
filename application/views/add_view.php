@@ -61,7 +61,7 @@ include 'header_inc_view.php';?>
 			<br>
 
 			<label for="db_password">Database Password</label>
-			<input type="password" name="db_password" id="db_password">
+			<input type="password" name="db_password" id="db_password" autocomplete="off">
 			
 			<br>			
 			
