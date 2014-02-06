@@ -1,6 +1,3 @@
-
-</head>
-
 <body>
 
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -17,8 +14,10 @@
 
                     <?php $page_title = (!empty($page['title'])) ? $page['title'] : null?>
 
-                    <li<?php if($page_title == 'Download') echo ' class="active"'?>><a href="https://github.com/philipashlock/DataBeam/archive/master.zip">Download</a></li>
-                    <li<?php if($page_title == 'Developers') echo ' class="active"'?>><a href="https://github.com/GSA-OCSIT/DataBeam/">Developers</a></li>
+                    <li<?php if ($page_title == 'Download') echo ' class="active"' ?>><a
+                            href="https://github.com/GSA/DataBeam/archive/master.zip">Download</a></li>
+                    <li<?php if ($page_title == 'Developers') echo ' class="active"' ?>><a
+                            href="https://github.com/GSA/DataBeam/">Developers</a></li>
                     <li<?php if($page_title == 'About') echo ' class="active"'?>><a href="<?php echo base_url();?>">About</a></li>
                 </ul>
 

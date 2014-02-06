@@ -42,11 +42,14 @@
 		
 		<h4 style="margin-top : 2em">To Do</h4>
 		<p>
-			I'm starting to migrate issues to the <a href="//github.com/philipashlock/DataBeam/issues">Github Repo Issue tracker</a>
-		</p>
-	    <ul>
-			<li>Provide developer documentation for installation and contributions. Provide better user documentation and feature listing</li>	
-		    <li>Implement better caching - it's barely implemented at all right now</li>	
+            I'm starting to migrate issues to the <a href="//github.com/GSA/DataBeam/issues">Github Repo Issue
+                tracker</a>
+        </p>
+    <ul>
+        <li>Provide developer documentation for installation and contributions. Provide better user documentation and
+            feature listing
+        </li>
+        <li>Implement better caching - it's barely implemented at all right now</li>
 		    <li>Implement a UI for custom SQL queries - the backend for this is already in place</li>			
 		    <li>Implement pagination by default and provide some configurable options per database</li>	
 		    <li>Implement more robust CSV handling and even queuing for batch uploads</li>			
